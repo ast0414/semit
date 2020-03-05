@@ -2,6 +2,37 @@
 layout: default
 ---
 
+# Intro
+Brief introduction about our motivation
+
+## MNIST and Kannada-MNIST
+Brief description of MNIST and Kannada-MNIST
+
+# Methods
+
+## What is VAE?
+about variational autoencoder
+
+## What is GAN?
+about generative adversarial network
+
+# Experiments
+experimental setup
+
+## Baselines
+description of comparison methods
+
+## Results
+
+awesome results
+
+
+# Conclusion
+concluding remarks
+
+
+# Cheat Sheet
+
 Text can be **bold**, _italic_, ~~strikethrough~~ or `keyword`.
 
 [Link to another page](./another-page.html).
