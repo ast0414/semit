@@ -15,7 +15,7 @@ from torchvision.utils import save_image
 import os
 import pickle
 from utils.misc import save_checkpoint
-from models.vae import VAE
+from models.modules import VAE
 from torchsummary import summary
 
 parser = argparse.ArgumentParser(description='VAE for MNIST and KMNIST')
