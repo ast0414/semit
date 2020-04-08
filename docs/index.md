@@ -4,6 +4,7 @@ layout: default
 
 # Intro
 Brief introduction about our motivation
+I am writing on StackEdit. Is it working?
 
 ## MNIST and Kannada-MNIST
 Brief description of MNIST and Kannada-MNIST
@@ -156,3 +157,6 @@ Long, single-line code blocks should not wrap. They should horizontally scroll i
 ```
 The final element.
 ```
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbMTUxNzk0Mzc3N119
+-->
