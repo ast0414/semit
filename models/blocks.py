@@ -73,7 +73,7 @@ class Conv2dBlock(nn.Module):
         if activation == 'relu':
             self.activation = nn.ReLU(inplace=True)
         elif activation == 'lrelu':
-            self.activation = nn.LeakyReLU(inplace=True)
+            self.activation = nn.LeakyReLU(negative_slope=0.2, inplace=True)
         elif activation == 'prelu':
             self.activation = nn.PReLU()
         elif activation == 'selu':
