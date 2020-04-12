@@ -20,7 +20,15 @@ about generative adversarial network
 
 # Experiments
 
-For our experiment, we utilized our convolutional VAE that we created. We also used a baseline models for Kannada-MNIST datasets as well as a classification model of MNIST data. First, we ran our convolutional VAE model on the Kannada MNIST dataset that we retrieved from Kaggle. The convolutional VAE outputs MNIST data, which we used as input in our classification model. The classification model then gave us accuracy values that determined whether our translation model gave us good data. Finally, we compared these accuracy values to the ones we obtained with our baseline Kannada-MNIST model to ultimately determine whether our model that we created could translate Kannada numerical values to Arabic numerical values.
+For our experiment, we utilized our convolutional VAE that we created. We also used a baseline models for Kannada-MNIST datasets as well as a classification model of MNIST data. First, we ran our convolutional VAE model on the Kannada MNIST dataset that we retrieved from Kaggle. From the convolutional VAE, we obtained accuracy values that were then compared with the accuracy values of our baseline models for Kannada-MNIST data and MNIST data. This allowed us to ultimately determine whether our model that we created could translate Kannada numerical values effectively.
+
+## Baselines
+
+We compared the results of our classification model to a baseline Kannada-MNIST model. The baseline model was a convulutional neural network with the following layers:
+* convolutional layers that had increasing output filter sizes (from 32 to 256)
+* a dropout layers with a rate of 0.5 for each convolutional layer 
+* flatten layer
+* a dense layer of 512x10 units 
 
 The classification model for MNIST data takes in the MNIST data obtained from the VAE model and creates a convolutional neural network with the following layers:
 * convolutional layers that had increasing output filter sizes (from 32 to 256)
@@ -29,11 +37,7 @@ The classification model for MNIST data takes in the MNIST data obtained from th
 * flatten layer
 * dense layer with dimensions 512x10
 
-The accuracy values that we obtain from this model give us an idea of how well the translation of Kannada-MNIST is with our CVAE implementation.
-
-## Baselines
-
-We compared the results of our classification model to a baseline Kannada-MNIST model. The baseline model was a convulutional neural network with convolutional layers that had increasing output filter sizes (from 32 to 256), a dropout layers with a rate of 0.5 for each convolutional layer, a flatten layer, and a dense layer of 512x10 units. The baseline model showed us how accurately it could evaluate both Kannada-MNIST data and Dig-MNIST data. This model was a baseline. Therefore, it didn't have any changes/differences to how it was evaluating these datasets. It simply was taking in either Kannada-MNIST data or Dig-MNIST data and determining how accurately the model was classifying the test data. The accuracy of this baseline data can be used to compare with the accuracy we get from our MNIST classification model. This is because our MNIST classification model is classifying MNIST data that we obtained from our own CVAE implementation whereas the baseline model is classifying data we had gotten from another dataset. 
+The baseline models showed us at what accuracy image to image translation should perform in order to be effective for both MNIST and Kannada-MNIST data. We used the baseline model of Kannada-MNIST data as the baseline model for Dig-MNIST data as well. The accuracy of this baseline data can be used to compare with the accuracy we get from our CVAE implementation.
 
 ## Results
 Our results are depicted visually below. We have shown the loss curve of the CVAE implementation to show that our model is of good fit. We also visually show the translation between KMNIST and MNIST data from MNIST to KMNIST. Our classification performance, which compares the accuracy of each of our models, is also shown below. Finally, we depicted the shared latent space of each of the numerical digits in Kannada and the regular English digits.
@@ -54,7 +58,7 @@ Below is a visual representation of our translation that is occurring. As you ca
 
 ### Classification Performance
 
-We obtained 5 different accuracy values for each of our datasets. 
+We obtained 5 different accuracy values for each of our datasets. For unsupervised, 1% semi-supervised, 5% semi-supervised, 10% semi-supervised, and fully supervised learning, our translation of MNIST data has a high accuracy of about 98%. 
 
 The Fowlkes-Mallows score is another evaluation metric that we used to show how well our model performed. It shows the similarity among the clusters that are obtained after multiple clustering algorithms have been run on them.
 
