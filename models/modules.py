@@ -9,18 +9,12 @@ class Encoder(nn.Module):
         super(Encoder, self).__init__()
         self.model = []
 
-        # self.model += [Conv2dBlock(input_dim=1, output_dim=32, kernel_size=5, stride=2, padding=4, norm='bn', activation='lrelu')]
-        # self.model += [Conv2dBlock(input_dim=32, output_dim=64, kernel_size=3, stride=2, padding=1, norm='bn', activation='lrelu')]
-        # self.model += [Conv2dBlock(input_dim=64, output_dim=128, kernel_size=3, stride=2, padding=1, norm='bn', activation='lrelu')]
-        # self.model += [Conv2dBlock(input_dim=128, output_dim=256, kernel_size=3, stride=2, padding=1, norm='bn', activation='lrelu')]
-        # self.model += [Conv2dBlock(input_dim=256, output_dim=512, kernel_size=3, stride=2, padding=1, norm='bn', activation='lrelu')]
-        # self.model = nn.Sequential(*self.model)
-
         self.model += [Conv2dBlock(input_dim=1, output_dim=32, kernel_size=4, stride=2, padding=1, norm='bn', activation='lrelu')]
         self.model += [Conv2dBlock(input_dim=32, output_dim=64, kernel_size=4, stride=2, padding=1, norm='bn', activation='lrelu')]
         self.model += [Conv2dBlock(input_dim=64, output_dim=128, kernel_size=4, stride=2, padding=1, norm='bn', activation='lrelu')]
         self.model += [Conv2dBlock(input_dim=128, output_dim=256, kernel_size=4, stride=2, padding=1, norm='bn', activation='lrelu')]
         self.model += [Conv2dBlock(input_dim=256, output_dim=512, kernel_size=4, stride=2, padding=1, norm='bn', activation='lrelu')]
+
         self.model = nn.Sequential(*self.model)
 
     def forward(self, x):
@@ -32,18 +26,12 @@ class Decoder(nn.Module):
         super(Decoder, self).__init__()
         self.model = []
 
-        # self.model += [ConvTranspose2dBlock(512, 256, 3, 2, 1, 1, norm='bn', activation='lrelu')]
-        # self.model += [ConvTranspose2dBlock(256, 128, 3, 2, 1, 1, norm='bn', activation='lrelu')]
-        # self.model += [ConvTranspose2dBlock(128, 64, 3, 2, 1, 1, norm='bn', activation='lrelu')]
-        # self.model += [ConvTranspose2dBlock(64, 32, 3, 2, 1, 1, norm='bn', activation='lrelu')]
-        # self.model += [ConvTranspose2dBlock(32, 1, 5, 2, 4, 1, activation='tanh')]
-        # self.model = nn.Sequential(*self.model)
-
         self.model += [ConvTranspose2dBlock(512, 256, 4, 2, 1, 0, norm='bn', activation='lrelu')]
         self.model += [ConvTranspose2dBlock(256, 128, 4, 2, 1, 0, norm='bn', activation='lrelu')]
         self.model += [ConvTranspose2dBlock(128, 64, 4, 2, 1, 0, norm='bn', activation='lrelu')]
         self.model += [ConvTranspose2dBlock(64, 32, 4, 2, 1, 0, norm='bn', activation='lrelu')]
         self.model += [ConvTranspose2dBlock(32, 1, 4, 2, 1, 0, activation='tanh')]
+
         self.model = nn.Sequential(*self.model)
 
     def forward(self, x):
@@ -56,19 +44,15 @@ class Discriminator(nn.Module):
         self.model = []
 
         self.model += [Conv2dBlock(input_dim=1, output_dim=32, kernel_size=4, stride=2, padding=1, norm='none', activation='lrelu')]
-        # self.model += [nn.MaxPool2d(kernel_size=2, stride=2)]
         self.model += [nn.Dropout(p=0.5)]
         self.model += [Conv2dBlock(input_dim=32, output_dim=64, kernel_size=4, stride=2, padding=1, norm='none', activation='lrelu')]
-        # self.model += [nn.MaxPool2d(kernel_size=2, stride=2)]
         self.model += [nn.Dropout(p=0.5)]
         self.model += [Conv2dBlock(input_dim=64, output_dim=128, kernel_size=4, stride=2, padding=1, norm='none', activation='lrelu')]
-        # self.model += [nn.MaxPool2d(kernel_size=2, stride=2, padding=1)]
         self.model += [nn.Dropout(p=0.5)]
         self.model += [Conv2dBlock(input_dim=128, output_dim=256, kernel_size=4, stride=2, padding=1, norm='none', activation='lrelu')]
-        # self.model += [nn.MaxPool2d(kernel_size=2, stride=2)]
         self.model += [nn.Dropout(p=0.5)]
         self.model += [Conv2dBlock(input_dim=256, output_dim=512, kernel_size=4, stride=2, padding=1, norm='none', activation='lrelu')]
-        # self.model += [nn.MaxPool2d(kernel_size=2, stride=2)]
+
         self.model = nn.Sequential(*self.model)
 
         self.drop = nn.Dropout(p=0.5)
@@ -81,7 +65,6 @@ class Discriminator(nn.Module):
         out = self.drop(out)
         logit_discr = self.discriminator(out)
         logit_class = self.classifier(out)
-        # return out.view(-1, 1).squeeze(1)
         return logit_discr, logit_class
 
 
