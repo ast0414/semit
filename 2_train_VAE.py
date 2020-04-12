@@ -9,11 +9,13 @@ import torch.backends.cudnn as cudnn
 import torch.utils.data
 from torch import optim
 from torch.nn import functional as F
-from torch.utils.data import DataLoader, TensorDataset
+from torch.utils.data import DataLoader
 from torchvision.utils import save_image
 
 import os
 import pickle
+from utils.dataset import CustomTensorDataset
+from utils import transforms
 from utils.misc import save_checkpoint
 from models.modules import VAE
 from torchsummary import summary
@@ -35,7 +37,7 @@ parser.add_argument('--seed', type=int, default=1, metavar='S',
                     help='random seed (default: 1)')
 parser.add_argument('--log-interval', type=int, default=10, metavar='N',
                     help='how many batches to wait before logging training status')
-parser.add_argument('--save', default='', type=str, metavar='S', help='save path')
+parser.add_argument('--save', default='/localscratch/san37/semit/VAE', type=str, metavar='S', help='save path')
 args = parser.parse_args()
 
 torch.manual_seed(args.seed)
@@ -46,6 +48,8 @@ device = torch.device("cuda" if args.cuda else "cpu")
 
 if args.save == '':
     args.save = os.path.join('results', args.dataset)
+else:
+    args.save = os.path.join(args.save, args.dataset)
 
 if args.dataset == 'mnist':
     with open('data/mnist_full.pkl', 'rb') as f:
@@ -72,8 +76,18 @@ elif args.dataset == 'kannada':
 else:
     raise AttributeError
 
-train_dataset = TensorDataset(torch.from_numpy(x_train).float(), torch.from_numpy(y_train).long())
-val_dataset = TensorDataset(torch.from_numpy(x_val).float(), torch.from_numpy(y_val).long())
+train_transform = transforms.Compose([
+    transforms.Normalize(mean=0.5, std=0.5),
+    transforms.Resize(size=(32, 32))
+])
+
+eval_transform = transforms.Compose([
+    transforms.Normalize(mean=0.5, std=0.5),
+    transforms.Resize(size=(32, 32))
+])
+
+train_dataset = CustomTensorDataset(torch.from_numpy(x_train).float(), torch.from_numpy(y_train).long(), transform=train_transform)
+val_dataset = CustomTensorDataset(torch.from_numpy(x_val).float(), torch.from_numpy(y_val).long(), transform=eval_transform)
 # test_dataset = TensorDataset(torch.from_numpy(x_test).float(), torch.from_numpy(y_test).long())
 
 train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers)
@@ -85,14 +99,15 @@ num_epoch = args.iters // num_batch + 1
 args.__dict__.update({'epochs': num_epoch})
 
 model = VAE().to(device)
-summary(model, (1, 28, 28))
+summary(model, (1, 32, 32))
 
 optimizer = optim.Adam(model.parameters(), lr=1e-4, betas=(0.5, 0.999))
 
 
 def recon_loss(recon_x, x):
     # Reconstruction loss summed over all elements and batch
-    return F.binary_cross_entropy(recon_x, x, reduction='sum')
+    #return F.binary_cross_entropy(recon_x, x, reduction='sum')
+    return F.l1_loss(recon_x, x, reduction='sum')
 
 
 def gauss_kl_loss(mu, sd):
@@ -142,7 +157,7 @@ def test(epoch):
             if i == 0:
                 n = min(data.size(0), 8)
                 comparison = torch.cat([data[:n],
-                                      recon_batch.view(args.batch_size, 1, 28, 28)[:n]])
+                                      recon_batch.view(args.batch_size, 1, 32, 32)[:n]])
                 save_image(comparison.cpu(),
                            os.path.join(args.save, 'reconstruction_' + str(epoch) + '.png'), nrow=n)
 
@@ -161,7 +176,7 @@ if __name__ == "__main__":
         with torch.no_grad():
             sample = torch.randn(64, 512, 1, 1).to(device)
             sample = model.decode(sample).cpu()
-            save_image(sample.view(64, 1, 28, 28),
+            save_image(sample.view(64, 1, 32, 32),
                        os.path.join(args.save, 'sample_' + str(epoch) + '.png'))
 
     save_checkpoint({
