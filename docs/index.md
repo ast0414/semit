@@ -24,10 +24,24 @@ experimental setup
 ## Baselines
 description of comparison methods
 
-## Results
+## Translation
 
-awesome results
+| Dataset | Input $$X_i$$ | Reconstruction $$X_i \rightarrow \widetilde{X}_i$$ | Translation $$X_i \rightarrow \widetilde{X}_j$$|
+|:-:|:-:|:-:|:-:|
+| MNIST   | <img src="{{ site.baseurl }}/assets/images/input_1.gif" width="320" height="320" /> | <img src="{{ site.baseurl }}/assets/images/recon_1_1.gif" width="320" height="320" /> | <img src="{{ site.baseurl }}/assets/images/trans_1_2.gif" width="320" height="320" /> |
+| Kannada | <img src="{{ site.baseurl }}/assets/images/input_2.gif" width="320" height="320" /> | <img src="{{ site.baseurl }}/assets/images/recon_2_2.gif" width="320" height="320" /> | <img src="{{ site.baseurl }}/assets/images/trans_2_1.gif" width="320" height="320" /> |
 
+## Classification Performance
+
+|        |           |
+|:-:|:-:|:-:|
+| ![Accuracy]({{ site.baseurl }}/assets/images/accuracy.png)           | ![FMS]({{ site.baseurl }}/assets/images/fms.png) |
+
+## Visualization of the Shared Latent Space
+
+|       |
+|:-:|
+| ![tSNE Plot]({{ site.baseurl }}/assets/images/tsne.png) |
 
 # Conclusion
 concluding remarks
