@@ -19,7 +19,8 @@ about variational autoencoder
 about generative adversarial network
 
 # Experiments
-experimental setup
+
+For our experiment, we utilized our convolutional VAE that we created. We also used a baseline Kannada-MNIST model as well as a classification model of MNIST data. First, we ran our convolutional VAE model on the Kannada MNIST dataset that we retrieved from Kaggle. The convolutional VAE outputs MNIST data, which we used as input in our classification model. The classiication model then gave us accuracy values that determined whether our translation model gave us good data. Finally, we compared these accuracy values to the ones we obtained with our baseline Kannada-MNIST model to ultimately determine whethre our model that we created could translate numerical values in Kannada to Arabic numerical values.
 
 ## Baselines
 description of comparison methods
