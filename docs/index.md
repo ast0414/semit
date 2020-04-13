@@ -74,6 +74,8 @@ The Fowlkes-Mallows score is another evaluation metric that we used to show how 
 
 ### Visualization of the Shared Latent Space
 
+What the visualization below shows is the shared latent space. Latent space helps find a relationship between 2 different domains so that transformations can occur between those 2 domains. When there is a shared latent space, we know that those 2 domains can basically be translated from one to another. What the visualization below shows is that the shared latent space found is between the corresponding digits of Kannada and Arabic numbers. For the most part, each domain in Arabic has a corresponding domain in Kannada that is correct -- the 1s, 2s, 3s, 4s, 5s, 7s, 8s, and 9s match each other. There is no shared latent space between each languages 0s and 6s. The lack of shared latent space between these 2 numerals is a possible reason as to why the accuracy of translation between MNIST and KMNIST isn't 100%. 
+
 |       |
 |:-:|
 | ![tSNE Plot]({{ site.baseurl }}/assets/images/tsne.png) |
