@@ -1,4 +1,5 @@
-﻿---
+﻿
+---
 layout: default
 ---
 # StackEdit Working?
@@ -14,6 +15,7 @@ Brief description of MNIST and Kannada-MNIST
 
 ## What is VAE?
 about variational autoencoder
+
 
 ## What is GAN?
 GAN stands for Generative Adversarial Network, which are deep-learning based generative models. GANs are a model architecture for training generative models which are widely used to translate inputs from one domain to another. GANs were first introduced in 2014 by Ian Goodfellow et al in a paper titled "[Generative Adversarial Networks]([https://arxiv.org/abs/1406.2661](https://arxiv.org/abs/1406.2661))" . While initially proposed as a model for unsupervised learning, GANs have also proved to be useful for semi-supervised learning, fully supervised learning and reinforcement learning.
@@ -39,36 +41,53 @@ A key use of generative adversarial networks comes in image-to-image translation
 
 # Experiments
 
-For our experiment, we utilized our convolutional VAE that we created. We also used a baseline models for Kannada-MNIST datasets as well as a classification model of MNIST data. First, we ran our convolutional VAE model on the Kannada MNIST dataset that we retrieved from Kaggle. The convolutional VAE outputs MNIST data, which we used as input in our classification model. The classification model then gave us accuracy values that determined whether our translation model gave us good data. Finally, we compared these accuracy values to the ones we obtained with our baseline Kannada-MNIST model to ultimately determine whether our model that we created could translate Kannada numerical values to Arabic numerical values.
-
-Need to add:
-* description of how classification model of MNIST is created
+For our experiment, we utilized our convolutional VAE that we created. We also used a baseline models for Kannada-MNIST datasets as well as a classification model of MNIST data. First, we ran our convolutional VAE model on the Kannada MNIST dataset that we retrieved from Kaggle. From the convolutional VAE, we obtained accuracy values that were then compared with the accuracy values of our baseline models for Kannada-MNIST data and MNIST data. This allowed us to ultimately determine whether our model that we created could translate Kannada numerical values effectively.
 
 ## Baselines
 
-We compared the results of our classification model to a baseline Kannada-MNIST model. The baseline model was a convulutional neural network with convolutional layers that had increasing output filter sizes (from 32 to 256), a dropout layers with a rate of 0.5 for each convolutional layer, a flatten layer, and a dense layer of 512x10 units. The baseline model showed us how accurately it could evaluate both Kannada-MNIST data and Dig-MNIST data. This model was a baseline. Therefore, it didn't have any changes/differences to how it was evaluating these datasets. It simply was taking in either Kannada-MNIST data or Dig-MNIST data and determining how accurately the model was classifying the test data. The accuracy of this baseline data can be used to compare with the accuracy we get from our MNIST classification model. This is because our MNIST classification model is classifying MNIST data that we obtained from our own CVAE implementation whereas the baseline model is classifying data we had gotten from another dataset. 
+We compared the results of our classification model to a baseline Kannada-MNIST model. The baseline model was a convulutional neural network with the following layers:
+* convolutional layers that had increasing output filter sizes (from 32 to 256)
+* a dropout layers with a rate of 0.5 for each convolutional layer 
+* flatten layer
+* a dense layer of 512x10 units 
 
-## Translation
+The classification model for MNIST data takes in the MNIST data obtained from the VAE model and creates a convolutional neural network with the following layers:
+* convolutional layers that had increasing output filter sizes (from 32 to 256)
+* leaky relu layer
+* dropout layer
+* flatten layer
+* dense layer with dimensions 512x10
 
-Outline of results:
-* loss function of CVAE (explain what it is saying)
-* state accuracy of classification model
-* state accuracy of baseline model
-* compare both accuracies and state what each means
-* Display pictures of translation (found in results section)
+The baseline models showed us at what accuracy image to image translation should perform in order to be effective for both MNIST and Kannada-MNIST data. We used the baseline model of Kannada-MNIST data as the baseline model for Dig-MNIST data as well. The accuracy of this baseline data can be used to compare with the accuracy we get from our CVAE implementation.
+
+## Results
+Our results are depicted visually below. We have shown the loss curve of the CVAE implementation to show that our model is of good fit. We also visually show the translation between KMNIST and MNIST data from MNIST to KMNIST. Our classification performance, which compares the accuracy of each of our models, is also shown below. Finally, we depicted the shared latent space of each of the numerical digits in Kannada and the regular English digits.
+
+The CVAE obtained a loss function that is displayed below. This graph shows both the training and validation loss that was obtained. The first graph shows the loss for the Kannada MNIST dataset and the second graph shows the loss for the MNIST dataset:
+<img src="{{ site.baseurl }}/assets/images/kannada_loss.png" width="320" height="320" />
+<img src="{{ site.baseurl }}/assets/images/mnist_loss.png" width="320" height="320" />
+
+For both of these loss functions, we see that our model isn't overfitting nor underfitting. This means that our model can learn from a variety of datasets and can use what it has learned to evaluate generalized data.
+
+### Translation
+Below is a visual representation of our translation that is occurring. As you can see, with our MNIST data as input, we translate the data through reconstruction and obtain an output of Kannada-MNIST data. With Kannada-MNIST data as an input, we can translate to obtain MNIST data.
 
 | Dataset | Input $$X_i$$ | Reconstruction $$X_i \rightarrow \widetilde{X}_i$$ | Translation $$X_i \rightarrow \widetilde{X}_j$$|
 |:-:|:-:|:-:|:-:|
 | MNIST   | <img src="{{ site.baseurl }}/assets/images/input_1.gif" width="320" height="320" /> | <img src="{{ site.baseurl }}/assets/images/recon_1_1.gif" width="320" height="320" /> | <img src="{{ site.baseurl }}/assets/images/trans_1_2.gif" width="320" height="320" /> |
 | Kannada | <img src="{{ site.baseurl }}/assets/images/input_2.gif" width="320" height="320" /> | <img src="{{ site.baseurl }}/assets/images/recon_2_2.gif" width="320" height="320" /> | <img src="{{ site.baseurl }}/assets/images/trans_2_1.gif" width="320" height="320" /> |
 
-## Classification Performance
+### Classification Performance
+
+We obtained 5 different accuracy values for each of our datasets. For unsupervised, 1% semi-supervised, 5% semi-supervised, 10% semi-supervised, and fully supervised learning, our translation of MNIST data has a high accuracy of about 98%. 
+
+The Fowlkes-Mallows score is another evaluation metric that we used to show how well our model performed. It shows the similarity among the clusters that are obtained after multiple clustering algorithms have been run on them.
 
 |        |           |
 |:-:|:-:|:-:|
 | ![Accuracy]({{ site.baseurl }}/assets/images/accuracy.png)           | ![FMS]({{ site.baseurl }}/assets/images/fms.png) |
 
-## Visualization of the Shared Latent Space
+### Visualization of the Shared Latent Space
 
 |       |
 |:-:|
@@ -203,3 +222,6 @@ Long, single-line code blocks should not wrap. They should horizontally scroll i
 ```
 The final element.
 ```
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbMTE4ODA2NzMzXX0=
+-->
