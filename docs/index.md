@@ -1,3 +1,4 @@
+﻿
 ---
 layout: default
 ---
@@ -5,18 +6,45 @@ layout: default
 - Sungtae - working
 
 # Intro
-Brief introduction about our motivation
+We set out to try a new approach on generalization in machine learning algorithms. It is often hard to train a model on predicting labels for a given set of data that will perform well on new sets of data. Training a new model on new datasets may also be infeasible due difficulties like: a lack of labels or difficulty in collecting new data. With our new approach to generalization, we hope to improve a neural network model's ability to classify to new datasets. To accomplish this, we are using a Variational Autoencoder (VAE) as well as a Generative Adversarial Network (GAN) to achieve accurate image-to-image translation. We use this translation as a form of  domain adaptation. As a proof-of-concept, we explore this model's ability to adapt the lesser known KannadaMNIST dataset to images similar to the more well known MNIST dataset. The resulting images are then classified with a pre-trained MNIST model.
 
 ## MNIST and Kannada-MNIST
-Brief description of MNIST and Kannada-MNIST
+
+The MNIST dataset is a commonly used dataset in machine learning. This dataset consists of images of size 28 pixels by 28 pixels. Each image contains a hand-drawn arabic numeral between 0 to 9 inclusive. Typically, this dataset is used to train a supervised machine learning model to predict an arabic numeral label for a given 28 by 28 pixel image. Here is an example of labeled MNIST data:
+
+![MNIST]({{ site.baseurl }}/assets/images/MNIST_labeled.png)
+
+The Kannada-MNIST, or K-MNIST, dataset is similar to the MNIST dataset except the images are of hand-drawn Kannada numerals instead of arabic numerals. For reference, Kannada is a language predominantly spoken in Karnataka (a state in the southwest of India). This dataset is fairly new, and some are still researching on how to train the most accurate model to predict the labels for this dataset. The following is an example of labeled K-MNIST data:
+
+![K-MNIST]({{ site.baseurl }}/assets/images/KMNIST_labeled.png)
 
 # Methods
 
 ## What is VAE?
 about variational autoencoder
 
+
 ## What is GAN?
-about generative adversarial network
+GAN stands for Generative Adversarial Network, which are deep-learning based generative models. GANs are a model architecture for training generative models which are widely used to translate inputs from one domain to another. GANs were first introduced in 2014 by Ian Goodfellow et al in a paper titled "[Generative Adversarial Networks]([https://arxiv.org/abs/1406.2661](https://arxiv.org/abs/1406.2661))" . While initially proposed as a model for unsupervised learning, GANs have also proved to be useful for semi-supervised learning, fully supervised learning and reinforcement learning.
+
+The GAN model involves two sub-models:
+
+1. **Generator Model** - This is a model that is used to generate new examples from the problem domain. 
+	
+	The input to the model is a vector from a multidimensional space. After training with the dataset, this multidimensional space is mapped to corresponding points in the problem domain. This forms a compressed representation of the multidimensional data space. 
+
+	After training, the generator model is used to generate new samples.
+ 
+2. **Discriminator Model** - This model is used to classify example inputs based on whether they come from the problem domain or from the generated examples. 
+
+	The model inputs an example from the domain (real or generated) and classifies it with a binary label *real* or *fake*. The *real* examples come from the training dataset, while the *fake* examples come from the generator model.
+
+	Typically, after training is complete, the discriminator model is discarded since we are more interested in the generator model to generate more samples.
+
+![Architecture](https://3qeqpr26caki16dnhd19sv6by6v-wpengine.netdna-ssl.com/wp-content/uploads/2019/04/Example-of-the-Generative-Adversarial-Network-Model-Architecture.png "Sample Generative Adversarial Network Architecture")
+
+
+A key use of generative adversarial networks comes in image-to-image translation, to map images from the input domain to a different output domain. 
 
 # Experiments
 
@@ -24,7 +52,11 @@ For our experiment, we utilized our convolutional VAE that we created. We also u
 
 ## Baselines
 
-We compared the results of our classification model to a baseline Kannada-MNIST model. This baseline model was a convolutional neural network with the following layers:
+**_Sungtae will review this again_**
+
+We compared the results of our classification model to a baseline Kannada-MNIST model. The baseline model was a convulutional neural network with convolutional layers that had increasing output filter sizes (from 32 to 256), a dropout layers with a rate of 0.5 for each convolutional layer, a flatten layer, and a dense layer of 512x10 units. The baseline model showed us how accurately it could evaluate both Kannada-MNIST data and Dig-MNIST data. This model was a baseline. Therefore, it didn't have any changes/differences to how it was evaluating these datasets. It simply was taking in either Kannada-MNIST data or Dig-MNIST data and determining how accurately the model was classifying the test data. The accuracy of this baseline data can be used to compare with the accuracy we get from our MNIST classification model. This is because our MNIST classification model is classifying MNIST data that we obtained from our own CVAE implementation whereas the baseline model is classifying data we had gotten from another dataset.
+
+We compared the results of our classification model to a baseline Kannada-MNIST model. The baseline model was a convulutional neural network with the following layers:
 * convolutional layers that had increasing output filter sizes (from 32 to 256)
 * a dropout layers with a rate of 0.5 for each convolutional layer 
 * flatten layer
