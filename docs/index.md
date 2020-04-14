@@ -1,7 +1,7 @@
-﻿
 ---
 layout: default
 ---
+
 # StackEdit Working?
 - Sungtae - working
 
@@ -25,7 +25,11 @@ In general, autoencoder is a form of unsupervised learning algorithm that implem
 
 Overall, the structure of an autoencoder can be outlined as followed (1):
 
-![Autoencoders](assets/images/autoencoders.png)
+<p align="center">
+    <img src="assets/images/autoencoders.png" alt="Autoencoders" />
+    <br>
+    <em>Autoencoder</em>
+</p>
 
 * Encoder: the neural network responsible that is responsible for learning how to perform dimensionality reduction and produce a representation  of the reduced data
 * Bottleneck (latent space): the representation, in the form of a vector, of the input after compression is performed
@@ -35,7 +39,12 @@ Essentially, dimensionality reduction is performed through the training of the e
 
 Variational Autoencoder (VAE) is a specific framework within "generative modeling", which in itself, is an area of machine learning that deals with distribution models of data points within a high dimensional space. While structurally similar to an autoencoder by which it also contains an encoder, decoder and latent space, to accomplish the generative process, VAE's encoder produces a distribution (enforced to approximate a standard normal distribution) within the latent space rather than encoding a vector representation (2).
 
-![Vae](assets/images/vae.png)
+<p align="center">
+    <img src="assets/images/vae.png" alt="VAE" />
+    <br>
+    <em>Variational Autoencoder</em>
+</p>
+
 
 Under this model, the generation of new information is performed through the sampling within the distribution and processing of the decoder. To analyze the competency of VAE model, rather than implementing the use of reconstruction loss, analysis is typically performed using a combination of generative loss (the difference between the generated image and a real image) and latent loss (the Kullback-Leibler divergence between the latent distribution and unit Gaussian).
 
@@ -63,8 +72,11 @@ The GAN model involves two sub-models:
 
 	Typically, after training is complete, the discriminator model is discarded since we are more interested in the generator model to generate more samples.
 
-![Architecture](https://3qeqpr26caki16dnhd19sv6by6v-wpengine.netdna-ssl.com/wp-content/uploads/2019/04/Example-of-the-Generative-Adversarial-Network-Model-Architecture.png "Sample Generative Adversarial Network Architecture")
-
+<p align="center">
+    <img src="https://3qeqpr26caki16dnhd19sv6by6v-wpengine.netdna-ssl.com/wp-content/uploads/2019/04/Example-of-the-Generative-Adversarial-Network-Model-Architecture.png" alt="GAN" />
+    <br>
+    <em>Generative Adversarial Network</em>
+</p>
 
 A key use of generative adversarial networks comes in image-to-image translation, to map images from the input domain to a different output domain. 
 
@@ -98,9 +110,10 @@ Our results are depicted visually below. We have shown the loss curve of the CVA
 
 ### Loss Curve
 The CVAE obtained a loss function that is displayed below. This graph shows both the training and validation loss that was obtained. The first graph shows the loss for the MNIST dataset and the second graph shows the loss for the Kannada MNIST dataset:
-|:-:|:-:|:-:|:-:|
-| MNIST | <img src="{{ site.baseurl }}/assets/images/mnist_loss.png" width="370" height="320" /> |
-| Kannada   | <img src="{{ site.baseurl }}/assets/images/kannada_loss.png" width="370" height="320" /> |
+
+| MNIST | Kannada |
+|:-:|:-:|
+| <img src="{{ site.baseurl }}/assets/images/mnist_loss.png" width="370" height="320" /> | <img src="{{ site.baseurl }}/assets/images/kannada_loss.png" width="370" height="320" /> |
 
 For both of these loss functions, we see that our model isn't overfitting nor underfitting. This means that our model can learn from a variety of datasets and can use what it has learned to evaluate generalized data.
 
@@ -130,9 +143,17 @@ The Fowlkes-Mallows score is another evaluation metric that we used to show how 
 
 What the visualization below shows is the shared latent space. Latent space helps find a relationship between 2 different domains so that transformations can occur between those 2 domains. When there is a shared latent space, we know that those 2 domains can basically be translated from one to another. What the visualization below shows is that the shared latent space found is between the corresponding digits of Kannada and Arabic numbers. For the most part, each domain in Arabic has a corresponding domain in Kannada that is correct -- the 1s, 2s, 3s, 4s, 5s, 7s, 8s, and 9s match each other. There is no shared latent space between each languages 0s and 6s. The lack of shared latent space between these 2 numerals is a possible reason as to why the accuracy of translation between MNIST and KMNIST isn't 100%. 
 
-|       |
+<!--|       |
 |:-:|
 | ![tSNE Plot]({{ site.baseurl }}/assets/images/tsne.png) |
+-->
+<p align="center">
+    <img src="assets/images/tsne.png" alt="tSNE" />
+    <br>
+    <em>tSNE Plot</em>
+</p>
+
+
 
 # Conclusion
 concluding remarks
