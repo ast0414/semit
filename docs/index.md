@@ -20,7 +20,7 @@ Overall, the structure of an autoencoder can be outlined as followed (1):
 <p align="center">
     <img src="assets/images/autoencoders.png" alt="Autoencoders" />
     <br>
-    <em>Autoencoder</em>
+    <em>img source: "https://towardsdatascience.com/auto-encoder-what-is-it-and-what-is-it-used-for-part-1-3e5c6f017726"</em>
 </p>
 
 * Encoder: the neural network responsible that is responsible for learning how to perform dimensionality reduction and produce a representation  of the reduced data
@@ -34,7 +34,7 @@ Variational Autoencoder (VAE) is a specific framework within "generative modelin
 <p align="center">
     <img src="assets/images/vae.png" alt="VAE" />
     <br>
-    <em>Variational Autoencoder</em>
+    <em>img source: "https://towardsdatascience.com/understanding-variational-autoencoders-vaes-f70510919f73"</em>
 </p>
 
 Under this model, the generation of new information is performed through the sampling within the distribution and processing of the decoder. To analyze the competency of VAE model, rather than implementing the use of reconstruction loss, analysis is typically performed using a combination of generative loss (the difference between the generated image and a real image) and latent loss (the Kullback-Leibler divergence between the latent distribution and unit Gaussian).
