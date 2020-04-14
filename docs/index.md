@@ -27,7 +27,7 @@ Essentially, dimensionality reduction is performed through the training of the e
 
 Variational Autoencoder (VAE) is a specific framework within "generative modeling", which in itself, is an area of machine learning that deals with distribution models of data points within a high dimensional space. While structurally similar to an autoencoder by which it also contains an encoder, decoder and latent space, to accomplish the generative process, VAE's encoder produces a distribution (enforced to approximate a standard normal distribution) within the latent space rather than encoding a vector representation (2).
 
-![Vae](/assets/images/vae.png)
+![Vae](assets/images/vae.png)
 
 Under this model, the generation of new information is performed through the sampling within the distribution and processing of the decoder. To analyze the competency of VAE model, rather than implementing the use of reconstruction loss, analysis is typically performed using a combination of generative loss (the difference between the generated image and a real image) and latent loss (the Kullback-Leibler divergence between the latent distribution and unit Gaussian).
 
