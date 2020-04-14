@@ -74,14 +74,16 @@ The baseline models showed us at what accuracy image to image translation should
 ## Results
 Our results are depicted visually below. We have shown the loss curve of the CVAE implementation to show that our model is of good fit. We also visually show the translation between KMNIST and MNIST data from MNIST to KMNIST. Our classification performance, which compares the accuracy of each of our models, is also shown below. Finally, we depicted the shared latent space of each of the numerical digits in Kannada and the regular English digits.
 
-The CVAE obtained a loss function that is displayed below. This graph shows both the training and validation loss that was obtained. The first graph shows the loss for the Kannada MNIST dataset and the second graph shows the loss for the MNIST dataset:
-<img src="{{ site.baseurl }}/assets/images/kannada_loss.png" width="320" height="320" />
-<img src="{{ site.baseurl }}/assets/images/mnist_loss.png" width="320" height="320" />
+### Loss Curve
+The CVAE obtained a loss function that is displayed below. This graph shows both the training and validation loss that was obtained. The first graph shows the loss for the MNIST dataset and the second graph shows the loss for the Kannada MNIST dataset:
+|:-:|:-:|:-:|:-:|
+| MNIST | <img src="{{ site.baseurl }}/assets/images/mnist_loss.png" width="370" height="320" /> |
+| Kannada   | <img src="{{ site.baseurl }}/assets/images/kannada_loss.png" width="370" height="320" /> |
 
 For both of these loss functions, we see that our model isn't overfitting nor underfitting. This means that our model can learn from a variety of datasets and can use what it has learned to evaluate generalized data.
 
 ### Translation
-Below is a visual representation of our translation that is occurring. As you can see, with our MNIST data as input, we translate the data through reconstruction and obtain an output of Kannada-MNIST data. With Kannada-MNIST data as an input, we can translate to obtain MNIST data.
+Below is a visual representation of our translation between Kannada numerals and Arabic numerals. As you can see, with our MNIST data as input, we translate the data through reconstruction and obtain an output of Kannada-MNIST data. With Kannada-MNIST data as an input, we can translate to obtain MNIST data. We show a 3 step process for the translation to and from Kannada numbers. Our first step is to obtain the input data. This input data is represented as either Arabic numerals (MNIST) or Kannada numerals (KMNIST). The second step is the reconstruction step. In this step, the model learns how to recreate our input data and create new data that matches the input data. Finally, the last step is the translation itself. This is where we utilize our CVAE to translate MNIST data to KMNIST data, and vice versa.
 
 | Dataset | Input $$X_i$$ | Reconstruction $$X_i \rightarrow \widetilde{X}_i$$ | Translation $$X_i \rightarrow \widetilde{X}_j$$|
 |:-:|:-:|:-:|:-:|
@@ -90,15 +92,21 @@ Below is a visual representation of our translation that is occurring. As you ca
 
 ### Classification Performance
 
-We obtained 5 different accuracy values for each of our datasets. For unsupervised, 1% semi-supervised, 5% semi-supervised, 10% semi-supervised, and fully supervised learning, our translation of MNIST data has a high accuracy of about 98%. 
+We obtained 5 different accuracy values for each of our datasets. For unsupervised, 1% semi-supervised, 5% semi-supervised, 10% semi-supervised, and fully supervised learning, our translation of MNIST data has a high accuracy of about 98%.
 
-The Fowlkes-Mallows score is another evaluation metric that we used to show how well our model performed. It shows the similarity among the clusters that are obtained after multiple clustering algorithms have been run on them.
+The accuracy of our KMNIST data translation increases from unsupervised learning to fully supervised learning. Using unsupervised learning for KMNIST translation, our accuracy was about 3%, showing that our model couldn't translate data effectively. With a 1% semi-supervised learning, the accuracy increased tremendously for KMNIST data translation -- the accuracy was about 88%. This shows that with a small amount of labeled data, our model can translate at a greater performance. This is further shown with the increase in accuracy for 5% semi-supervised learning (accuracy is about 91%) and for 10% semi-supervised learning (accuracy is about 94%). The highest accuracy achieved with KMNIST data translation was about 96% accuracy. This was achieved with fully-supervised learning. Therefore, with labeled data, our model can translate Kannada MNIST data better.
+
+The accuracy of the Dig MNIST dataset also shows an increasing trend as the learning becomes more supervised. For unsupervised learning, the accuracy is about 3%. For 1% semi supervised, the accuracy found was about 59%. For 5% semi supervised, the accuracy is about 67%. For 10% semi supervised, teh accuracy is about 70%. Finally, for fully supervised learning the accuracy is about 75%. Though we have shown that with more labeled data our model can have a higher accuracy with translating Dig MNIST, the highest accuracy obtained was only about 75%, which means that there are still some errors in translation for Dig MNIST.
+
+The Fowlkes-Mallows score is another evaluation metric that we used to show how well our model performed. It shows the similarity among the clusters that are obtained after multiple clustering algorithms have been run. For the MNIST data set, we see that that Fowlkes-Mallows score stays relatively constant at around 0.96, showing that the similarity of clustering is roughly the same for each of the types of learning that we ran our model with. However, for both the KMNIST and Dig-MNIST data, the Fowlkes-Mallows score increases as the learning changes from unsupervised to fully supervised. This means that the similarity in clusterings increases as there is more labeled data to learn from in the model. With more similar clusterings, it is easier to determine what translates to what. Therefore, it makes sense that as the amount of similarity between clustering increases, so does the trend in accuracy.
 
 |        |           |
 |:-:|:-:|:-:|
 | ![Accuracy]({{ site.baseurl }}/assets/images/accuracy.png)           | ![FMS]({{ site.baseurl }}/assets/images/fms.png) |
 
 ### Visualization of the Shared Latent Space
+
+What the visualization below shows is the shared latent space. Latent space helps find a relationship between 2 different domains so that transformations can occur between those 2 domains. When there is a shared latent space, we know that those 2 domains can basically be translated from one to another. What the visualization below shows is that the shared latent space found is between the corresponding digits of Kannada and Arabic numbers. For the most part, each domain in Arabic has a corresponding domain in Kannada that is correct -- the 1s, 2s, 3s, 4s, 5s, 7s, 8s, and 9s match each other. There is no shared latent space between each languages 0s and 6s. The lack of shared latent space between these 2 numerals is a possible reason as to why the accuracy of translation between MNIST and KMNIST isn't 100%. 
 
 |       |
 |:-:|
