@@ -1,3 +1,4 @@
+﻿
 ---
 layout: default
 ---
@@ -22,8 +23,28 @@ The Kannada-MNIST, or K-MNIST, dataset is similar to the MNIST dataset except th
 ## What is VAE?
 about variational autoencoder
 
+
 ## What is GAN?
-about generative adversarial network
+GAN stands for Generative Adversarial Network, which are deep-learning based generative models. GANs are a model architecture for training generative models which are widely used to translate inputs from one domain to another. GANs were first introduced in 2014 by Ian Goodfellow et al in a paper titled "[Generative Adversarial Networks]([https://arxiv.org/abs/1406.2661](https://arxiv.org/abs/1406.2661))" . While initially proposed as a model for unsupervised learning, GANs have also proved to be useful for semi-supervised learning, fully supervised learning and reinforcement learning.
+
+The GAN model involves two sub-models:
+
+1. **Generator Model** - This is a model that is used to generate new examples from the problem domain. 
+	
+	The input to the model is a vector from a multidimensional space. After training with the dataset, this multidimensional space is mapped to corresponding points in the problem domain. This forms a compressed representation of the multidimensional data space. 
+
+	After training, the generator model is used to generate new samples.
+ 
+2. **Discriminator Model** - This model is used to classify example inputs based on whether they come from the problem domain or from the generated examples. 
+
+	The model inputs an example from the domain (real or generated) and classifies it with a binary label *real* or *fake*. The *real* examples come from the training dataset, while the *fake* examples come from the generator model.
+
+	Typically, after training is complete, the discriminator model is discarded since we are more interested in the generator model to generate more samples.
+
+![Architecture](https://3qeqpr26caki16dnhd19sv6by6v-wpengine.netdna-ssl.com/wp-content/uploads/2019/04/Example-of-the-Generative-Adversarial-Network-Model-Architecture.png "Sample Generative Adversarial Network Architecture")
+
+
+A key use of generative adversarial networks comes in image-to-image translation, to map images from the input domain to a different output domain. 
 
 # Experiments
 
