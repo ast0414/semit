@@ -10,19 +10,16 @@ We set out to try a new approach on generalization in machine learning algorithm
 
 ## MNIST and Kannada-MNIST
 
-The MNIST dataset is a commonly used dataset in machine learning. This dataset consists of images of size 28 pixels by 28 pixels. Each image contains a hand-drawn arabic numeral between 0 to 9 inclusive. Typically, this dataset is used to train a supervised machine learning model to predict an arabic numeral label for a given 28 by 28 pixel image. Here is an example of labeled MNIST data:
+The MNIST dataset is a commonly used dataset in machine learning. This dataset consists of images of size 28 pixels by 28 pixels. Each image contains a hand-drawn arabic numeral between 0 to 9 inclusive. Typically, this dataset is used to train a supervised machine learning model to predict an arabic numeral label for a given 28 by 28 pixel image.
 
-![MNIST]({{ site.baseurl }}/assets/images/MNIST_labeled.png)
+The Kannada-MNIST, or K-MNIST, dataset is similar to the MNIST dataset except the images are of hand-drawn Kannada numerals instead of arabic numerals. For reference, Kannada is a language predominantly spoken in Karnataka (a state in the southwest of India). This dataset is fairly new, and some are still researching on how to train the most accurate model to predict the labels for this dataset.
 
-picture reference:
-https://www.researchgate.net/figure/Example-images-from-the-MNIST-dataset_fig1_306056875
+The followings are example images of MNIST and K-MNIST data for each numeric class:
 
-The Kannada-MNIST, or K-MNIST, dataset is similar to the MNIST dataset except the images are of hand-drawn Kannada numerals instead of arabic numerals. For reference, Kannada is a language predominantly spoken in Karnataka (a state in the southwest of India). This dataset is fairly new, and some are still researching on how to train the most accurate model to predict the labels for this dataset. The following is an example of labeled K-MNIST data:
-
-![K-MNIST]({{ site.baseurl }}/assets/images/KMNIST_labeled.png)
-
-pitcure reference:
-https://towardsdatascience.com/a-new-handwritten-digits-dataset-in-ml-town-kannada-mnist-69df0f2d1456
+| MNIST | Kannada |
+|:-|:-|
+| <img src="{{ site.baseurl }}/assets/images/MNIST_labeled.png" height="500" /> | <img src="{{ site.baseurl }}/assets/images/KMNIST_labeled.png" height="500" /> |
+| Credit: https://www.researchgate.net/figure/Example-images-from-the-MNIST-dataset_fig1_306056875 | Credit: https://towardsdatascience.com/a-new-handwritten-digits-dataset-in-ml-town-kannada-mnist-69df0f2d1456 |
 
 # Methods
 
