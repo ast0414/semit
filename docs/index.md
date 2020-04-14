@@ -14,9 +14,15 @@ The MNIST dataset is a commonly used dataset in machine learning. This dataset c
 
 ![MNIST]({{ site.baseurl }}/assets/images/MNIST_labeled.png)
 
+picture reference:
+https://www.researchgate.net/figure/Example-images-from-the-MNIST-dataset_fig1_306056875
+
 The Kannada-MNIST, or K-MNIST, dataset is similar to the MNIST dataset except the images are of hand-drawn Kannada numerals instead of arabic numerals. For reference, Kannada is a language predominantly spoken in Karnataka (a state in the southwest of India). This dataset is fairly new, and some are still researching on how to train the most accurate model to predict the labels for this dataset. The following is an example of labeled K-MNIST data:
 
 ![K-MNIST]({{ site.baseurl }}/assets/images/KMNIST_labeled.png)
+
+pitcure reference:
+https://towardsdatascience.com/a-new-handwritten-digits-dataset-in-ml-town-kannada-mnist-69df0f2d1456
 
 # Methods
 
@@ -34,7 +40,7 @@ Overall, the structure of an autoencoder can be outlined as followed (1):
 * Encoder: the neural network responsible that is responsible for learning how to perform dimensionality reduction and produce a representation  of the reduced data
 * Bottleneck (latent space): the representation, in the form of a vector, of the input after compression is performed
 * Decoder: the neural network responsible for reproducing the original input from the bottleneck
-  
+
 Essentially, dimensionality reduction is performed through the training of the encoder and decoder in order to tune the neural networks' parameters and minimize reconstruction loss between input and output. While autoencoders have been used and proven to be effective models for data compression, they cannot be used to generate new content just by having the decoder taking a sample vector within the latent space. This stems from the lack of regularization of the latent space by the autoencoder, whose learning and training processes direct towards the single goal of encoding and decoding the input. With the latent space constructed as distinct clusters by the encoder, thus exhibiting discontinuities, random sampling from such latent space and feeding it back into the decoder will result in non-meaningful output.
 
 Variational Autoencoder (VAE) is a specific framework within "generative modeling", which in itself, is an area of machine learning that deals with distribution models of data points within a high dimensional space. While structurally similar to an autoencoder by which it also contains an encoder, decoder and latent space, to accomplish the generative process, VAE's encoder produces a distribution (enforced to approximate a standard normal distribution) within the latent space rather than encoding a vector representation (2).
@@ -60,13 +66,13 @@ GAN stands for Generative Adversarial Network, which are deep-learning based gen
 
 The GAN model involves two sub-models:
 
-1. **Generator Model** - This is a model that is used to generate new examples from the problem domain. 
-	
-	The input to the model is a vector from a multidimensional space. After training with the dataset, this multidimensional space is mapped to corresponding points in the problem domain. This forms a compressed representation of the multidimensional data space. 
+1. **Generator Model** - This is a model that is used to generate new examples from the problem domain.
+
+	The input to the model is a vector from a multidimensional space. After training with the dataset, this multidimensional space is mapped to corresponding points in the problem domain. This forms a compressed representation of the multidimensional data space.
 
 	After training, the generator model is used to generate new samples.
- 
-2. **Discriminator Model** - This model is used to classify example inputs based on whether they come from the problem domain or from the generated examples. 
+
+2. **Discriminator Model** - This model is used to classify example inputs based on whether they come from the problem domain or from the generated examples.
 
 	The model inputs an example from the domain (real or generated) and classifies it with a binary label *real* or *fake*. The *real* examples come from the training dataset, while the *fake* examples come from the generator model.
 
@@ -78,7 +84,7 @@ The GAN model involves two sub-models:
     <em>Generative Adversarial Network</em>
 </p>
 
-A key use of generative adversarial networks comes in image-to-image translation, to map images from the input domain to a different output domain. 
+A key use of generative adversarial networks comes in image-to-image translation, to map images from the input domain to a different output domain.
 
 # Experiments
 
@@ -92,9 +98,9 @@ We compared the results of our classification model to a baseline Kannada-MNIST 
 
 We compared the results of our classification model to a baseline Kannada-MNIST model. The baseline model was a convulutional neural network with the following layers:
 * convolutional layers that had increasing output filter sizes (from 32 to 256)
-* a dropout layers with a rate of 0.5 for each convolutional layer 
+* a dropout layers with a rate of 0.5 for each convolutional layer
 * flatten layer
-* a dense layer of 512x10 units 
+* a dense layer of 512x10 units
 
 The classification model for MNIST data takes in the MNIST data obtained from the VAE model and creates a convolutional neural network with the following layers:
 * convolutional layers that had increasing output filter sizes (from 32 to 256)
@@ -141,7 +147,7 @@ The Fowlkes-Mallows score is another evaluation metric that we used to show how 
 
 ### Visualization of the Shared Latent Space
 
-What the visualization below shows is the shared latent space. Latent space helps find a relationship between 2 different domains so that transformations can occur between those 2 domains. When there is a shared latent space, we know that those 2 domains can basically be translated from one to another. What the visualization below shows is that the shared latent space found is between the corresponding digits of Kannada and Arabic numbers. For the most part, each domain in Arabic has a corresponding domain in Kannada that is correct -- the 1s, 2s, 3s, 4s, 5s, 7s, 8s, and 9s match each other. There is no shared latent space between each languages 0s and 6s. The lack of shared latent space between these 2 numerals is a possible reason as to why the accuracy of translation between MNIST and KMNIST isn't 100%. 
+What the visualization below shows is the shared latent space. Latent space helps find a relationship between 2 different domains so that transformations can occur between those 2 domains. When there is a shared latent space, we know that those 2 domains can basically be translated from one to another. What the visualization below shows is that the shared latent space found is between the corresponding digits of Kannada and Arabic numbers. For the most part, each domain in Arabic has a corresponding domain in Kannada that is correct -- the 1s, 2s, 3s, 4s, 5s, 7s, 8s, and 9s match each other. There is no shared latent space between each languages 0s and 6s. The lack of shared latent space between these 2 numerals is a possible reason as to why the accuracy of translation between MNIST and KMNIST isn't 100%.
 
 <!--|       |
 |:-:|
