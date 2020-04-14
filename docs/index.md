@@ -13,7 +13,7 @@ Brief description of MNIST and Kannada-MNIST
 # Methods
 
 ## What is VAE?
-In general, autoencoders is a form of unsupervised learning algorithm that implements the use of neural networks with the typical goal of data compression and dimensionality reduction.
+In general, autoencoder is a form of unsupervised learning algorithm that implements the use of neural networks with the typical goal of data compression and dimensionality reduction.
 
 Overall, the structure of an autoencoder can be outlined as followed (1):
 
@@ -23,7 +23,7 @@ Overall, the structure of an autoencoder can be outlined as followed (1):
 * Bottleneck (latent space): the representation, in the form of a vector, of the input after compression is performed
 * Decoder: the neural network responsible for reproducing the original input from the bottleneck
   
-In general, dimensionality reduction is performed through the training of the encoder and decoder in order to tune the neural networks' parameters and minimize reconstruction loss between input and output. While Auto encoders have been used and proven to be effective models for data compression, it cannot be used to generate new content just by having the decoder taking a sample vector within the latent space. This is stemmed from the lack of regularization of the latent space by the autoencoder, whose learning and training processes direct towards the single goal of encoding and decoding the input. With the latent space constructed as distinct clusters by the autoencoders, thus exhibiting discontinuities, random sampling from such latent space and feeding it back into the decoder will result in non-meaningful output.
+Essentially, dimensionality reduction is performed through the training of the encoder and decoder in order to tune the neural networks' parameters and minimize reconstruction loss between input and output. While Auto encoders have been used and proven to be effective models for data compression, it cannot be used to generate new content just by having the decoder taking a sample vector within the latent space. This is stemmed from the lack of regularization of the latent space by the autoencoder, whose learning and training processes direct towards the single goal of encoding and decoding the input. With the latent space constructed as distinct clusters by the autoencoders, thus exhibiting discontinuities, random sampling from such latent space and feeding it back into the decoder will result in non-meaningful output.
 
 Variational Autoencoder (VAE) is a specific framework within "generative modeling", which, in itself, is an area of machine learning that deals with distribution models of data points within a high dimensional space. While structurally similar to an autoencoder by which it also contains an encoder and decoder, to accomplish the generative process, VAE's encoder produces a distribution (enforced to approximate a standard normal distribution) within the latent space rather than encoding a vector representation (2).
 
