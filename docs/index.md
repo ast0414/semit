@@ -17,7 +17,7 @@ In general, autoencoders is a form of unsupervised learning algorithm that imple
 
 Overall, the structure of an autoencoder can be outlined as followed (1):
 
-![autoencoders]({{ site.baseurl }}/assets/images/autoencoders.png)
+![Autoencoders]({{ site.baseurl }}/assets/images/autoencoders.png)
 
 * Encoder: the neural network responsible that is responsible for learning how to perform dimensionality reduction and produce a representation  of the reduced data.
 * Bottleneck (latent space): the representation, in the form of a vector, of the input after compression is performed
@@ -25,13 +25,17 @@ Overall, the structure of an autoencoder can be outlined as followed (1):
   
 In general, dimensionality reduction is performed through the training of the encoder and decoder in order to tune the neural networks' parameters and minimize reconstruction loss between input and output. While Auto encoders have been used and proven to be effective models for data compression, it cannot be used to generate new content just by having the decoder taking a sample vector within the latent space. This is stemmed from the lack of regularization of the latent space by the autoencoder, whose learning and training processes direct towards the single goal of encoding and decoding the input. With the latent space constructed as distinct clusters by the autoencoders, thus exhibiting discontinuities, random sampling from such latent space and feeding it back into the decoder will result in non-meaningful output.
 
-Variational Autoencoder (VAE) is a specific framework within "generative modeling", which, in itself, is an area of machine learning that deals with distribution models of data points within a high dimensional space (2). While structurally similar to an autoencoder by which it also contains an encoder and decoder, to accomplish the generative process, VAE's encoder produces a distribution (enforced to approximate a standard normal distribution) within the latent space rather than encoding a vector representation (3).
+Variational Autoencoder (VAE) is a specific framework within "generative modeling", which, in itself, is an area of machine learning that deals with distribution models of data points within a high dimensional space. While structurally similar to an autoencoder by which it also contains an encoder and decoder, to accomplish the generative process, VAE's encoder produces a distribution (enforced to approximate a standard normal distribution) within the latent space rather than encoding a vector representation (2).
 
-![vae]({{ site.baseurl }}/assets/images/vae.png)
+![Vae]({{ site.baseurl }}/assets/images/vae.png)
 
 Under this model, the generation of new information is performed through the sampling within the distribution and processing of the decoder. To analyze the competency of VAE model, rather than implementing the use of reconstruction loss, analysis is typically performed using a combination of generative loss (the difference between the generated image and a real image) and latent loss (the Kullback-Leibler divergence between the latent distribution and unit Gaussian).
 
 Variation autoencoders have been incorporated in literatures and practical scenarios for many different purposes, including the interpolation of facial images with respect to different attributes (age, hair color, expression, etc.). For this particular project, Variational Autoencoders is combined with Generative Adversarial Networks as part of a UNIT framework that is implemented for image-to-image translation, specifically, the translation from Kannada MNIST digits to MNIST digits.
+
+reference:
+(1) https://towardsdatascience.com/auto-encoder-what-is-it-and-what-is-it-used-for-part-1-3e5c6f017726
+(2) https://towardsdatascience.com/understanding-variational-autoencoders-vaes-f70510919f73
 
 ## What is GAN?
 about generative adversarial network
