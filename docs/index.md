@@ -85,7 +85,7 @@ A key use of generative adversarial networks comes in image-to-image translation
 
 ## Image-to-Image Translation Networks
 In this project, we use a framework that combines VAE and GAN to perform image-to-image translation tasks.
-Specifically, we adopt the UNIT framework proposed by [Liu et al. (2017)](http://papers.nips.cc/paper/6672-unsupervised-image-to-image-translation-network "UNIT"), which was used in unsupervised image-to-image translation tasks, while we further extend it to semi-supervised and fully-supervised image translation tasks.
+Specifically, we adopt the UNIT framework proposed by [Liu et al. (2017)](#liu2017), which was used in unsupervised image-to-image translation tasks, while we further extend it to semi-supervised and fully-supervised image translation tasks.
 
 ### Framework
 The overall framework of our proposed model is depicted in the following figure.
@@ -102,7 +102,7 @@ It is a combination of VAE and GAN architecture that consists of the following m
 
 2. **Decoders/Generators**: each decoder (in terms of VAE) or generator (in terms of GAN) $$G_i$$ reconstructs samples $$\widetilde{X}_{i}^{j}$$ using latent vectors $$z$$ where the subscript $$i$$ means the decoder's own domain and the superscript $$j$$ means the sample's origin domain. For example, $$\widetilde{X}_1^2$$ represents the samples reconstructed in $$X_1$$ domain using the latent vectors encoded using the input data from $$X_2$$ domain.
 
-3. **Discriminators**: each discriminator $$D_i$$ judges whether inputs are the **_real_** samples from the domain $$X_i$$ or **_fake (translated)_** samples, i.e., $$\widetilde{X}_1^2$$ or $$\widetilde{X}_2^1$$. At the same time, each discriminator $$D_i$$ also gives class predictions for input samples, regardless of whether they are real or fake, similar to the one used in AC-GAN [(Odena et al., 2017)](https://dl.acm.org/doi/10.5555/3305890.3305954 "AC-GAN").
+3. **Discriminators**: each discriminator $$D_i$$ judges whether inputs are the **_real_** samples from the domain $$X_i$$ or **_fake (translated)_** samples, i.e., $$\widetilde{X}_1^2$$ or $$\widetilde{X}_2^1$$. At the same time, each discriminator $$D_i$$ also gives class predictions for input samples, regardless of whether they are real or fake, similar to the one used in AC-GAN [(Odena et al., 2017)](#odena2017).
 
 #### <a name="shared"></a> *Shared Latent Space
 
@@ -200,9 +200,9 @@ concluding remarks
 - Everyone has equally contributed to web page creation
 
 # References
-[(Liu et al., 2017) Liu, Ming-Yu, Thomas Breuel, and Jan Kautz. "Unsupervised image-to-image translation networks." Advances in neural information processing systems. 2017.](http://papers.nips.cc/paper/6672-unsupervised-image-to-image-translation-network "UNIT")
+<a name="liu2017"></a>[(Liu et al., 2017) Liu, Ming-Yu, Thomas Breuel, and Jan Kautz. "Unsupervised image-to-image translation networks." Advances in neural information processing systems. 2017.](http://papers.nips.cc/paper/6672-unsupervised-image-to-image-translation-network "UNIT")
 
-[(Odena et al., 2017) Odena, Augustus, Christopher Olah, and Jonathon Shlens. "Conditional image synthesis with auxiliary classifier gans." Proceedings of the 34th International Conference on Machine Learning-Volume 70. JMLR. org, 2017.](https://dl.acm.org/doi/10.5555/3305890.3305954 "AC-GAN")
+<a name="odena2017"></a>[(Odena et al., 2017) Odena, Augustus, Christopher Olah, and Jonathon Shlens. "Conditional image synthesis with auxiliary classifier gans." Proceedings of the 34th International Conference on Machine Learning-Volume 70. JMLR. org, 2017.](https://dl.acm.org/doi/10.5555/3305890.3305954 "AC-GAN")
 
 # Cheat Sheet
 
