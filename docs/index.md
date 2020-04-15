@@ -23,7 +23,7 @@ The followings are example images of MNIST and K-MNIST data for each numeric cla
 
 # Methods
 
-## What is VAE?
+## Variational Autoencoders
 In general, autoencoder is a form of unsupervised learning algorithm that implements the use of neural networks with the typical goal of data compression and dimensionality reduction.
 
 Overall, the structure of an autoencoder can be outlined as followed (1):
@@ -58,7 +58,7 @@ reference:
 (2) https://towardsdatascience.com/understanding-variational-autoencoders-vaes-f70510919f73
 
 
-## What is GAN?
+## Generative Adversarial Networks
 GAN stands for Generative Adversarial Network, which are deep-learning based generative models. GANs are a model architecture for training generative models which are widely used to translate inputs from one domain to another. GANs were first introduced in 2014 by Ian Goodfellow et al in a paper titled "[Generative Adversarial Networks]([https://arxiv.org/abs/1406.2661](https://arxiv.org/abs/1406.2661))" . While initially proposed as a model for unsupervised learning, GANs have also proved to be useful for semi-supervised learning, fully supervised learning and reinforcement learning.
 
 The GAN model involves two sub-models:
@@ -82,6 +82,38 @@ The GAN model involves two sub-models:
 </p>
 
 A key use of generative adversarial networks comes in image-to-image translation, to map images from the input domain to a different output domain.
+
+## Image-to-Image Translation Networks
+In this project, we use a framework that combines VAE and GAN to perform image-to-image translation tasks.
+Specifically, we adopt the UNIT framework proposed by [Liu et al. (2017)](http://papers.nips.cc/paper/6672-unsupervised-image-to-image-translation-network "UNIT"), which was used in unsupervised image-to-image translation tasks, while we further extend it to semi-supervised and fully-supervised image translation tasks.
+
+### Framework
+The overall framework of our proposed model is depicted in the following figure.
+
+<p align="center">
+    <img src="{{ site.baseurl }}/assets/images/framework.png" alt="SEMIT" height="480" />
+    <br>
+    <em>Image-to-image translation networks. </em>
+</p>
+
+It is a combination of VAE and GAN architecture that consists of the following modules:
+
+1. **Encoders**: each encoder $$E_i$$ encodes samples from a source domain data $$X_1$$ or a target domain data $$X_2$$ into a shared latent space<sup>[*](#shared)</sup> $$Z$$.
+
+2. **Decoders/Generators**: each decoder (in terms of VAE) or generator (in terms of GAN) $$G_i$$ reconstructs samples $$\widetilde{X}_{i}^{j}$$ using latent vectors $$z$$ where the subscript $$i$$ means the decoder's own domain and the superscript $$j$$ means the sample's origin domain. For example, $$\widetilde{X}_1^2$$ represents the samples reconstructed in $$X_1$$ domain using the latent vectors encoded using the input data from $$X_2$$ domain.
+
+3. **Discriminators**: each discriminator $$D_i$$ judges whether inputs are the **_real_** samples from the domain $$X_i$$ or **_fake (translated)_** samples, i.e., $$\widetilde{X}_1^2$$ or $$\widetilde{X}_2^1$$. At the same time, each discriminator $$D_i$$ also gives class predictions for input samples, regardless of whether they are real or fake, similar to the one used in AC-GAN [(Odena et al., 2017)](https://dl.acm.org/doi/10.5555/3305890.3305954 "AC-GAN").
+
+#### <a name="shared"></a> *Shared Latent Space
+
+| <img src="{{ site.baseurl }}/assets/images/shared_latent.png" alt="Shared Latent" width="690"/><br><em>Source: Liu et al. (2017)</em> | Since the latent space $$Z$$ is shared by both domains, it is possible to generate a target domain sample $$\widetilde{x}_2$$ from a latent vector $$z$$ that was encoded from a source domain sample $$x_1$$, e.g., $$\widetilde{x}_2=G_2(E_1(x_1))$$, or in the opposite direction. |
+
+
+## Training
+
+### VAE Loss
+
+### GAN Loss
 
 # Experiments
 
@@ -138,9 +170,7 @@ The accuracy of the Dig MNIST dataset also shows an increasing trend as the lear
 
 The Fowlkes-Mallows score is another evaluation metric that we used to show how well our model performed. It shows the similarity among the clusters that are obtained after multiple clustering algorithms have been run. For the MNIST data set, we see that that Fowlkes-Mallows score stays relatively constant at around 0.96, showing that the similarity of clustering is roughly the same for each of the types of learning that we ran our model with. However, for both the KMNIST and Dig-MNIST data, the Fowlkes-Mallows score increases as the learning changes from unsupervised to fully supervised. This means that the similarity in clusterings increases as there is more labeled data to learn from in the model. With more similar clusterings, it is easier to determine what translates to what. Therefore, it makes sense that as the amount of similarity between clustering increases, so does the trend in accuracy.
 
-|        |           |
-|:-:|:-:|:-:|
-| ![Accuracy]({{ site.baseurl }}/assets/images/accuracy.png)           | ![FMS]({{ site.baseurl }}/assets/images/fms.png) |
+| ![Accuracy]({{ site.baseurl }}/assets/images/accuracy.png) | ![FMS]({{ site.baseurl }}/assets/images/fms.png) |
 
 ### Visualization of the Shared Latent Space
 
@@ -161,6 +191,18 @@ What the visualization below shows is the shared latent space. Latent space help
 # Conclusion
 concluding remarks
 
+# Contributions
+- Anh: Led the study and discussion about VAE
+- Naman: Led the study and discussion about GAN
+- Nitya: Designed and implemented MNIST classification models
+- Joshua: Designed and implemented Kannada-MNIST classification models 
+- Sungtae: Designed and implemented image-to-image translation models  
+- Everyone has equally contributed to web page creation
+
+# References
+[(Liu et al., 2017) Liu, Ming-Yu, Thomas Breuel, and Jan Kautz. "Unsupervised image-to-image translation networks." Advances in neural information processing systems. 2017.](http://papers.nips.cc/paper/6672-unsupervised-image-to-image-translation-network "UNIT")
+
+[(Odena et al., 2017) Odena, Augustus, Christopher Olah, and Jonathon Shlens. "Conditional image synthesis with auxiliary classifier gans." Proceedings of the 34th International Conference on Machine Learning-Volume 70. JMLR. org, 2017.](https://dl.acm.org/doi/10.5555/3305890.3305954 "AC-GAN")
 
 # Cheat Sheet
 
