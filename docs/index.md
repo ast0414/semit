@@ -37,7 +37,7 @@ Variational Autoencoder (VAE) is a specific framework within "generative modelin
     <em>img source: "https://towardsdatascience.com/understanding-variational-autoencoders-vaes-f70510919f73"</em>
 </p>
 
-Under this model, the generation of new information is performed through the sampling within the distribution and processing of the decoder. To analyze the competency of VAE model, rather than implementing the use of reconstruction loss, analysis is typically performed using a combination of reconstruction loss (the log-likelihood of a specific data point) and latent loss (the Kullback-Leibler divergence, a quantification of the difference between two probability distributions, between the latent distribution and unit Gaussian).
+Under this model, the generation of new information is performed through the sampling within the distribution and processing of the decoder. To analyze the competency of VAE model, rather than implementing the use of reconstruction loss, analysis is typically performed using a combination of reconstruction loss (the expected log-likelihood of specific data points) and latent loss (the Kullback-Leibler divergence, a quantification of the difference between two probability distributions, between the latent distribution and unit Gaussian).
 
 <p align="center">
     <img src="assets/images/vae_loss_function.PNG" alt="VAE_LOSS_F" />
