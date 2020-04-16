@@ -18,7 +18,7 @@ The followings are example images of MNIST and K-MNIST data for each numeric cla
 | <img src="{{ site.baseurl }}/assets/images/MNIST_labeled.png" height="500" /> | <img src="{{ site.baseurl }}/assets/images/KMNIST_labeled.png" height="500" /> |
 | Credit: https://www.researchgate.net/figure/Example-images-from-the-MNIST-dataset_fig1_306056875 | Credit: https://towardsdatascience.com/a-new-handwritten-digits-dataset-in-ml-town-kannada-mnist-69df0f2d1456 |
 
-# Methods
+# Background
 
 ## Variational Autoencoders
 In general, autoencoder is a form of unsupervised learning algorithm that implements the use of neural networks with the typical goal of data compression and dimensionality reduction.
@@ -80,11 +80,11 @@ The GAN model involves two sub-models:
 
 A key use of generative adversarial networks comes in image-to-image translation, to map images from the input domain to a different output domain.
 
-## Image-to-Image Translation Networks
+# Image-to-Image Translation Networks
 In this project, we use a framework that combines VAE and GAN to perform image-to-image translation tasks.
 Specifically, we adopt the UNIT framework proposed by [Liu et al. (2017)](#liu2017), which was used in unsupervised image-to-image translation tasks, while we further extend it to semi-supervised and fully-supervised image translation tasks.
 
-### Framework
+## Framework
 The overall framework of our proposed model is depicted in the following figure.
 
 <p align="center">
