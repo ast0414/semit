@@ -2,9 +2,6 @@
 layout: default
 ---
 
-# StackEdit Working?
-- Sungtae - working
-
 # Intro
 We set out to try a new approach on generalization in machine learning algorithms. It is often hard to train a model on predicting labels for a given set of data that will perform well on new sets of data. Training a new model on new datasets may also be infeasible due difficulties like: a lack of labels or difficulty in collecting new data. With our new approach to generalization, we hope to improve a neural network model's ability to classify to new datasets. To accomplish this, we are using a Variational Autoencoder (VAE) as well as a Generative Adversarial Network (GAN) to achieve accurate image-to-image translation. We use this translation as a form of  domain adaptation. As a proof-of-concept, we explore this model's ability to adapt the lesser known KannadaMNIST dataset to images similar to the more well known MNIST dataset. The resulting images are then classified with a pre-trained MNIST model.
 
@@ -21,7 +18,7 @@ The followings are example images of MNIST and K-MNIST data for each numeric cla
 | <img src="{{ site.baseurl }}/assets/images/MNIST_labeled.png" height="500" /> | <img src="{{ site.baseurl }}/assets/images/KMNIST_labeled.png" height="500" /> |
 | Credit: https://www.researchgate.net/figure/Example-images-from-the-MNIST-dataset_fig1_306056875 | Credit: https://towardsdatascience.com/a-new-handwritten-digits-dataset-in-ml-town-kannada-mnist-69df0f2d1456 |
 
-# Methods
+# Background
 
 ## Variational Autoencoders
 In general, autoencoder is a form of unsupervised learning algorithm that implements the use of neural networks with the typical goal of data compression and dimensionality reduction.
@@ -83,11 +80,11 @@ The GAN model involves two sub-models:
 
 A key use of generative adversarial networks comes in image-to-image translation, to map images from the input domain to a different output domain.
 
-## Image-to-Image Translation Networks
+# Image-to-Image Translation Networks
 In this project, we use a framework that combines VAE and GAN to perform image-to-image translation tasks.
 Specifically, we adopt the UNIT framework proposed by [Liu et al. (2017)](#liu2017), which was used in unsupervised image-to-image translation tasks, while we further extend it to semi-supervised and fully-supervised image translation tasks.
 
-### Framework
+## Framework
 The overall framework of our proposed model is depicted in the following figure.
 
 <p align="center">
@@ -108,12 +105,68 @@ It is a combination of VAE and GAN architecture that consists of the following m
 
 | <img src="{{ site.baseurl }}/assets/images/shared_latent.png" alt="Shared Latent" width="690"/><br><em>Source: Liu et al. (2017)</em> | Since the latent space $$Z$$ is shared by both domains, it is possible to generate a target domain sample $$\widetilde{x}_2$$ from a latent vector $$z$$ that was encoded from a source domain sample $$x_1$$, e.g., $$\widetilde{x}_2=G_2(E_1(x_1))$$, or in the opposite direction. |
 
+All these modules are implemented as neural networks.
 
 ## Training
+In this section, we describe how the image-to-image translation model is trained.
 
-### VAE Loss
+### Preliminaries
+Should be added
 
-### GAN Loss
+### Loss and Objective Functions
+There are three different types of loss functions used in training of our image-to-image translation models. Each loss function has its own objective according to the role of the corresponding modules in the entire model.
+
+#### VAE Loss
+First of all, the VAE losses are deployed to train the encoders $$E_i$$ and the decoders/generators $$G_i$$ to be able to reconstruct the samples from its own domain dataset $$X_i$$ using the stochastic samples $$z$$ from the shared latent space $$Z$$.
+The VAE loss function for each domain can be written as follows: 
+
+$$\mathcal{L}_{\text{VAE}_1}(E_1, G_1) = \lambda_1 \text{KL}(q_1(z_1|x_1) \Vert p_\eta (z)) - \lambda_2 \mathbb{E}_{z_1 \sim q_1(z_1|x_1)}[\log p_{G_1} (x_1 | z_1)]$$
+
+$$\mathcal{L}_{\text{VAE}_2}(E_2, G_2) = \lambda_1 \text{KL}(q_2(z_2|x_2) \Vert p_\eta (z)) - \lambda_2 \mathbb{E}_{z_2 \sim q_2(z_2|x_2)}[\log p_{G_2} (x_2 | z_2)]$$
+
+where the hyper-parameters $$\lambda_1$$ and $$\lambda_2$$ control the balance between the reconstruction error and the KL divergence of the latent distribution from its prior.
+
+#### GAN Objective
+Next, GAN objectives are used to enforce the translated images look like images from the target domain through the adversarial training of generators and discriminators. For example, $$D_1$$ tries to discriminates the real samples $$x_1 \sim X_1 $$ and the translated fake samples $$\widetilde{x}_1^2 = G_1(z_2)$$. On the other hand, $$G_1$$ tries to make $$D_1$$ classify $$\widetilde{x}_1^2$$ as real samples. It can be formulated by following equations:
+
+$$
+\mathcal{L}_{\text{GAN}_1}(E_2, G_1, D_1) = \mathbb{E}_{x_1 \sim P_{X_1}}[\log D_{1s}(x_1)] + \mathbb{E}_{z_2 \sim q_2(z_2|x_2)}[\log (1 - D_{1s}(G_1(z_2)))]
+$$
+
+$$
+\mathcal{L}_{\text{GAN}_2}(E_1, G_2, D_2) = \mathbb{E}_{x_2 \sim P_{X_2}}[\log D_{2s}(x_2)] + \mathbb{E}_{z_1 \sim q_1(z_1|x_1)}[\log (1 - D_{2s}(G_2(z_1)))]
+$$
+
+where each $$D_{is}$$ refers to the discrimination output of $$D_i$$.
+
+#### Classification Loss
+Finally, we also introduce the classification losses for the labeled samples, if any, to encourage matching the classes of the samples between two domains. For example, a translated sample $$\widetilde{x}_1^2 = G_1(E_2(x_2))$$ where $$x_2$$ has its label $$y_2$$ in the domain $$X_2$$ should be classified by $$D_1$$ as the same class in the domain $$X_1$$. It can be formulated by cross-entropy loss or negative log-likelihood: 
+
+$$
+\begin{align}
+\mathcal{L}_{\text{CLASS}_1}(E_2, G_1, D_1) &= \alpha_1 \cdot {\underset { (x_1, y_1) \sim P_{X_{1}^{\text{labeled}}} }{\operatorname {\mathbb{E}} }}[−\log D_{1c}(y_1|x_1)] + \alpha_2 \cdot {\underset { z_2 \sim q_2(z_2|x_2), (x_2, y_2) \sim P_{X_{2}^{\text{labeled}}} }{\operatorname {\mathbb{E}} }}[−\log D_{1c}(y_2|G_1(x_2))]\\
+\mathcal{L}_{\text{CLASS}_2}(E_1, G_2, D_2) &= \alpha_2 \cdot {\underset { (x_2, y_2) \sim P_{X_{2}^{\text{labeled}}} }{\operatorname {\mathbb{E}} }}[−\log D_{2c}(y_2|x_2)] + \alpha_1 \cdot {\underset { z_1 \sim q_1(z_1|x_1), (x_1, y_1) \sim P_{X_{1}^{\text{labeled}}} }{\operatorname {\mathbb{E}} }}[−\log D_{2c}(y_1|G_2(x_1))]
+\end{align}
+$$
+
+where $$\alpha_i$$
+
+$$
+\alpha_i = \eta \cdot \frac{\text{the number of all samples in } X_i}{\text{the number of labeled samples in } X_i}
+$$
+
+and $$\eta$$ is a hyper-parameters that controls the weight of classification loss.
+
+### Joint Optimization
+Combining the losses and objective functions above together, we jointly optimize the following minimax problem:
+
+$$
+\begin{align}
+{\underset { E_1, E_2, G_1, G_2 }{\operatorname { min } }} \;\; {\underset { D_1, D_2 }{\operatorname { max } }} \quad & \mathcal{L}_{\text{VAE}_1}(E_1, G_1) + \mathcal{L}_{\text{GAN}_1}(E_2, G_1, D_1) + \mathcal{L}_{\text{CLASS}_1}(E_2, G_1, D_1)\\ + &\mathcal{L}_{\text{VAE}_2}(E_2, G_2) + \mathcal{L}_{\text{GAN}_2}(E_1, G_2, D_2) + \mathcal{L}_{\text{CLASS}_2}(E_1, G_2, D_2)
+\end{align}
+$$
+
+We use an alternating training procedure to solve this. Specifically, we first update $$D_1$$ and $$D_2$$ by applying a gradient ascent step while the parameters of the other modules are fixed. Then, $$E_1, E_2, G_1,$$ and $$G_2$$ are updated with a gradient descent step while $$D_1$$ and $$D_2$$ are fixed.
 
 # Experiments
 
