@@ -27,7 +27,7 @@ Overall, the structure of an autoencoder can be outlined as followed (1):
 * Bottleneck (latent space): the representation, in the form of a vector, of the input after compression is performed
 * Decoder: the neural network responsible for reproducing the original input from the bottleneck
   
-Essentially, dimensionality reduction is performed through the training of the encoder and decoder in order to tune the neural networks' parameters and minimize reconstruction loss between input and output. While autoencoders have been used and proven to be effective models for data compression, they cannot be used to generate new content just by having the decoder taking a sample vector within the latent space. This stems from the lack of regularization of the latent space by the autoencoder, whose learning and training processes direct towards the single goal of encoding and decoding the input. With the latent space constructed as distinct clusters by the encoder, thus exhibiting discontinuities, random sampling from such latent space and feeding it back into the decoder will result in non-meaningful output.
+Essentially, dimensionality reduction is performed through the training of the encoder and decoder in order to tune the neural networks' parameters and minimize reconstruction loss (which is typically represented as the mean squared error) between input and output. While autoencoders have been used and proven to be effective models for data compression, they cannot be used to generate new content just by having the decoder taking a sample vector within the latent space. This stems from the lack of regularization of the latent space by the autoencoder, whose learning and training processes direct towards the single goal of encoding and decoding the input. With the latent space constructed as distinct clusters by the encoder, thus exhibiting discontinuities, random sampling from such latent space and feeding it back into the decoder will result in non-meaningful output.
 
 Variational Autoencoder (VAE) is a specific framework within "generative modeling", which in itself, is an area of machine learning that deals with distribution models of data points within a high dimensional space. While structurally similar to an autoencoder by which it also contains an encoder, decoder and latent space, to accomplish the generative process, VAE's encoder produces a distribution (enforced to approximate a standard normal distribution) within the latent space rather than encoding a vector representation (2).
 
@@ -37,13 +37,22 @@ Variational Autoencoder (VAE) is a specific framework within "generative modelin
     <em>img source: "https://towardsdatascience.com/understanding-variational-autoencoders-vaes-f70510919f73"</em>
 </p>
 
-Under this model, the generation of new information is performed through the sampling within the distribution and processing of the decoder. To analyze the competency of VAE model, rather than implementing the use of reconstruction loss, analysis is typically performed using a combination of generative loss (the difference between the generated image and a real image) and latent loss (the Kullback-Leibler divergence between the latent distribution and unit Gaussian).
+Under this model, the generation of new information is performed through the sampling within the distribution and processing of the decoder. To analyze the competency of VAE model, rather than implementing the use of reconstruction loss, analysis is typically performed using a combination of reconstruction loss (the log-likelihood of a specific data point) and latent loss (the Kullback-Leibler divergence between the latent distribution and unit Gaussian).
 
-Variation autoencoders have been incorporated in literatures and practical scenarios for many different purposes, including the interpolation of facial images with respect to different attributes (age, hair color, expression, etc.). For this particular project, Variational Autoencoders is combined with Generative Adversarial Networks as part of a UNIT framework that is implemented for image-to-image translation, specifically, the translation from Kannada MNIST to MNIST digits.
+<p align="center">
+    <img src="assets/images/vae_loss_function.png" alt="VAE_LOSS_F" />
+    <br>
+    <em>img source: "https://arxiv.org/abs/1907.08956"</em>
+</p>
+
+In regards to the loss function, the left term refers to the latent loss (KL divergence) while the right term is the reconstruction loss. The goal of the VAE is to train the encoder and decoder so that their parameters θ* and φ* respectively result in the minimum loss function calculation (3).
+
+Variational autoencoders have been incorporated in literatures and practical scenarios for many different purposes, including the interpolation of facial images with respect to different attributes (age, hair color, expression, etc.). For this particular project, Variational Autoencoders is combined with Generative Adversarial Networks as part of a UNIT framework that is implemented for image-to-image translation, specifically, the translation from Kannada MNIST to MNIST digits.
 
 reference:
 (1) https://towardsdatascience.com/auto-encoder-what-is-it-and-what-is-it-used-for-part-1-3e5c6f017726
 (2) https://towardsdatascience.com/understanding-variational-autoencoders-vaes-f70510919f73
+(3) https://arxiv.org/abs/1907.08956
 
 ## What is GAN?
 about generative adversarial network
