@@ -50,9 +50,12 @@ In regards to the loss function, the left term represent to the latent loss (KL 
 Variational autoencoders have been incorporated in literatures and practical scenarios for many different purposes, including the interpolation of facial images with respect to different attributes (age, hair color, expression, etc.). For this particular project, Variational Autoencoders is combined with Generative Adversarial Networks as part of a UNIT framework that is implemented for image-to-image translation, specifically, the translation from Kannada MNIST to MNIST digits.
 
 reference:
-(1) https://towardsdatascience.com/auto-encoder-what-is-it-and-what-is-it-used-for-part-1-3e5c6f017726
-(2) https://towardsdatascience.com/understanding-variational-autoencoders-vaes-f70510919f73
-(3) https://arxiv.org/abs/1907.08956
+
+(1- for img) https://towardsdatascience.com/auto-encoder-what-is-it-and-what-is-it-used-for-part-1-3e5c6f017726
+
+(2- for img) https://towardsdatascience.com/understanding-variational-autoencoders-vaes-f70510919f73
+
+(3- for img and explanation on VAE loss function) https://arxiv.org/abs/1907.08956
 
 ## What is GAN?
 about generative adversarial network
