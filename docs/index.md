@@ -170,7 +170,7 @@ $$
 \end{align}
 $$
 
-We use an alternating training procedure to solve this. Specifically, we first update $$D_1$$ and $$D_2$$ by applying a gradient ascent step while the parameters of the other modules are fixed. Then, $$E_1, E_2, G_1,$$ and $$G_2$$ are updated with a gradient descent step while $$D_1$$ and $$D_2$$ are fixed.
+We use an alternating training procedure to solve this. Specifically, we first update $$D_1$$ and $$D_2$$ by applying a (stochastic) gradient **_ascent_** step while the parameters of the other modules are fixed. Then, $$E_1, E_2, G_1,$$ and $$G_2$$ are updated with a gradient **_descent_** step while $$D_1$$ and $$D_2$$ are fixed.
 
 # Experiments
 
@@ -229,6 +229,18 @@ The Fowlkes-Mallows score is another evaluation metric that we used to show how 
 
 | ![Accuracy]({{ site.baseurl }}/assets/images/accuracy.png) | ![FMS]({{ site.baseurl }}/assets/images/fms.png) |
 
+
+| Model | MNIST | Kannada-MNIST |
+|---|--:|--:|
+| 1% semi-supervised| 98.95 | 88.16 |
+| 5% semi-supervised | 99.03 | 91.64 |
+| 10% semi-supervised | 99.19 | 94.37 |
+| Fully-supervised | 99.09 | 96.45 |
+| Our MNIST Baseline | 96.73 | - |
+| Our Kannada-MNIST Baseline | - | 95.33 |
+| MNIST State-of-the-art [(Byerly et al., 2020)](#byerly2020) | 99.84 | - |
+| Kannada-MNIST Kaggle 1st place | - | 99.6 |
+
 ### Visualization of the Shared Latent Space
 
 What the visualization below shows is the shared latent space. Latent space helps find a relationship between 2 different domains so that transformations can occur between those 2 domains. When there is a shared latent space, we know that those 2 domains can basically be translated from one to another. What the visualization below shows is that the shared latent space found is between the corresponding digits of Kannada and Arabic numbers. For the most part, each domain in Arabic has a corresponding domain in Kannada that is correct -- the 1s, 2s, 3s, 4s, 5s, 7s, 8s, and 9s match each other. There is no shared latent space between each languages 0s and 6s. The lack of shared latent space between these 2 numerals is a possible reason as to why the accuracy of translation between MNIST and KMNIST isn't 100%.
@@ -260,6 +272,8 @@ concluding remarks
 <a name="liu2017"></a>[(Liu et al., 2017) Liu, Ming-Yu, Thomas Breuel, and Jan Kautz. "Unsupervised image-to-image translation networks." Advances in neural information processing systems. 2017.](http://papers.nips.cc/paper/6672-unsupervised-image-to-image-translation-network "UNIT")
 
 <a name="odena2017"></a>[(Odena et al., 2017) Odena, Augustus, Christopher Olah, and Jonathon Shlens. "Conditional image synthesis with auxiliary classifier gans." Proceedings of the 34th International Conference on Machine Learning-Volume 70. JMLR. org, 2017.](https://dl.acm.org/doi/10.5555/3305890.3305954 "AC-GAN")
+
+<a name="byerly2020"></a>[(Byerly et al., 2020) Byerly, Adam, Tatiana Kalganova, and Ian Dear. "A Branching and Merging Convolutional Network with Homogeneous Filter Capsules." arXiv preprint arXiv:2001.09136 (2020).](https://arxiv.org/abs/2001.09136)
 
 # Cheat Sheet
 
