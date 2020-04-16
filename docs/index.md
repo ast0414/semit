@@ -3,7 +3,11 @@ layout: default
 ---
 
 # Intro
-We set out to try a new approach on generalization in machine learning algorithms. It is often hard to train a model on predicting labels for a given set of data that will perform well on new sets of data. Training a new model on new datasets may also be infeasible due difficulties like: a lack of labels or difficulty in collecting new data. With our new approach to generalization, we hope to improve a neural network model's ability to classify to new datasets. To accomplish this, we are using a Variational Autoencoder (VAE) as well as a Generative Adversarial Network (GAN) to achieve accurate image-to-image translation. We use this translation as a form of  domain adaptation. As a proof-of-concept, we explore this model's ability to adapt the lesser known KannadaMNIST dataset to images similar to the more well known MNIST dataset. The resulting images are then classified with a pre-trained MNIST model.
+We set out to try a new approach on generalization in machine learning algorithms. It is often hard to train a model on predicting labels for a given set of data that will perform well on new sets of data. Training a new model on new datasets may also be infeasible due difficulties like: a lack of labels or difficulty in collecting new data.
+
+With our new approach to generalization, we hope to improve a neural network model's ability to classify to new datasets. To accomplish this, we are using a Variational Autoencoder (VAE) as well as a Generative Adversarial Network (GAN) to achieve accurate image-to-image translation. We use this translation as a form of domain adaptation.
+
+As a proof-of-concept, we explore this model's ability to adapt the lesser known Kannada-MNIST dataset to images similar to the more well known MNIST dataset. Experimental results show that the image-to-image translator with an auxiliary classifier gives higher accuracy than the baseline models.
 
 ## MNIST and Kannada-MNIST
 
