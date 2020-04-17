@@ -110,11 +110,11 @@ The overall framework of our proposed model is depicted in the following figure.
 
 It is a combination of VAE and GAN architecture that consists of the following modules:
 
-1. **Encoders**: each encoder $$E_i$$ encodes samples from a source domain data $$X_1$$ or a target domain data $$X_2$$ into a shared latent space<sup>[*](#shared)</sup> $$Z$$.
+* **Encoders**: each encoder $$E_i$$ encodes samples from a source domain data $$X_1$$ or a target domain data $$X_2$$ into a shared latent space<sup>[*](#shared)</sup> $$Z$$.
 
-2. **Decoders/Generators**: each decoder (in terms of VAE) or generator (in terms of GAN) $$G_i$$ reconstructs samples $$\widetilde{X}_{i}^{j}$$ using latent vectors $$z$$ where the subscript $$i$$ means the decoder's own domain and the superscript $$j$$ means the sample's origin domain. For example, $$\widetilde{X}_1^2$$ represents the samples reconstructed in $$X_1$$ domain using the latent vectors encoded using the input data from $$X_2$$ domain.
+* **Decoders/Generators**: each decoder (in terms of VAE) or generator (in terms of GAN) $$G_i$$ reconstructs samples $$\widetilde{X}_{i}^{j}$$ using latent vectors $$z$$ where the subscript $$i$$ means the decoder's own domain and the superscript $$j$$ means the sample's origin domain. For example, $$\widetilde{X}_1^2$$ represents the samples reconstructed in $$X_1$$ domain using the latent vectors encoded using the input data from $$X_2$$ domain.
 
-3. **Discriminators**: each discriminator $$D_i$$ judges whether inputs are the **_real_** samples from the domain $$X_i$$ or **_fake (translated)_** samples, i.e., $$\widetilde{X}_1^2$$ or $$\widetilde{X}_2^1$$. At the same time, each discriminator $$D_i$$ also gives class predictions for input samples, regardless of whether they are real or fake, similar to the one used in AC-GAN [(Odena et al., 2017)](#odena2017).
+* **Discriminators**: each discriminator $$D_i$$ judges whether inputs are the **_real_** samples from the domain $$X_i$$ or **_fake (translated)_** samples, i.e., $$\widetilde{X}_1^2$$ or $$\widetilde{X}_2^1$$. At the same time, each discriminator $$D_i$$ also gives class predictions for input samples, regardless of whether they are real or fake, similar to the one used in AC-GAN [(Odena et al., 2017)](#odena2017).
 
 #### <a name="shared"></a> *Shared Latent Space
 
@@ -126,7 +126,10 @@ All these modules are implemented as neural networks.
 In this section, we describe how the image-to-image translation model is trained.
 
 ### Preliminaries
-Should be added
+Assuming that we have two image data domain $$X_1$$ and $$X_2$$, e.g., MNIST and Kannada-MNIST, samples from each domain are drawn from each marginal distribution $$P_{X_1}$$ and $$P_{X_2}$$.
+
+We represent the latent distribution $$q$$ and the latent codes $$z$$ drawn from this distribtuion as
+$$z_1 \sim q_1(z_1|x_1)$$ or $$z_2 \sim q_2(z_2|x_2)$$ according to the encoder input $$x_1 \in X_1$$ or $$x_2 \in X_2$$.
 
 ### Loss and Objective Functions
 There are three different types of loss functions used in training of our image-to-image translation models. Each loss function has its own objective according to the role of the corresponding modules in the entire model.
