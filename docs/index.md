@@ -1,4 +1,4 @@
----
+﻿---
 layout: default
 ---
 
@@ -85,16 +85,45 @@ The GAN model involves two sub-models:
 
 	The model inputs an example from the domain (real or generated) and classifies it with a binary label *real* or *fake*. The *real* examples come from the training dataset, while the *fake* examples come from the generator model.
 
-	Typically, after training is complete, the discriminator model is discarded since we are more interested in the generator model to generate more samples.
-
 <p align="center">
-    <img src="https://3qeqpr26caki16dnhd19sv6by6v-wpengine.netdna-ssl.com/wp-content/uploads/2019/04/Example-of-the-Generative-Adversarial-Network-Model-Architecture.png" alt="GAN" />
+    <img src="https://www.researchgate.net/profile/Emiliano_De_Cristofaro/publication/317061929/figure/fig1/AS:497029693362176@1495512521469/Generative-Adversarial-Network-GAN.png" alt="GAN" />
     <br>
     <em>Generative Adversarial Network</em>
 </p>
 
+ #### Objective Function
+ 
+ In utilizing a GAN, we aim to optimize the objective function as described below. First, let us define some variables:
+<p align="center">
+    <img src="assets/images/GANloss4.jpeg" alt="GAN variables" />
+    <br>
+</p>
+
+Now, we want to build a discriminator model that maximizes the real data D(x) while minimizing the fake data D(G(x)). We also want to build a Generator model that maximizes the fake, noisy data D(G(x)).
+The following is a quick look at the cost functions for the Discriminator and Generator models:
+
+<p align="center">
+    <img src="assets/images/GANloss1.jpeg" alt="Model cost equations" />
+    <br>
+</p>
+
+Once these losses are calculated, the value of their gradient is calculated w.r.t their parameters and back propagated through the individual models.
+
+In essence, D and G play a two-player, minimax game to optimize the value of the expectation objective function:
+
+<p align="center">
+    <img src="assets/images/GANloss2.png" alt="Objective function" />
+    <br>
+</p>
+
+<p align="center">
+    <img src="assets/images/GANloss3.jpeg" alt="Min and max portions" />
+    <br>
+</p>
+
 A key use of generative adversarial networks comes in image-to-image translation, to map images from the input domain to a different output domain.
 
+Images and equations source: [https://medium.com/deep-math-machine-learning-ai/ch-14-general-adversarial-networks-gans-with-math-1318faf46b43](https://medium.com/deep-math-machine-learning-ai/ch-14-general-adversarial-networks-gans-with-math-1318faf46b43)
 # Image-to-Image Translation Networks
 In this project, we use a framework that combines VAE and GAN to perform image-to-image translation tasks.
 Specifically, we adopt the UNIT framework proposed by [Liu et al. (2017)](#liu2017), which was used in unsupervised image-to-image translation tasks, while we further extend it to semi-supervised and fully-supervised image translation tasks.
@@ -414,6 +443,3 @@ Long, single-line code blocks should not wrap. They should horizontally scroll i
 ```
 The final element.
 ```
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbMTE4ODA2NzMzXX0=
--->
