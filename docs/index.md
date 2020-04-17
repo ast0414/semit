@@ -244,16 +244,16 @@ The Fowlkes-Mallows score is another evaluation metric that we used to show how 
 | ![Accuracy]({{ site.baseurl }}/assets/images/accuracy.png) | ![FMS]({{ site.baseurl }}/assets/images/fms.png) |
 
 
-| Model | MNIST | Kannada-MNIST |
-|---|--:|--:|
-| 1% semi-supervised| 98.95 | 88.16 |
-| 5% semi-supervised | 99.03 | 91.64 |
-| 10% semi-supervised | 99.19 | 94.37 |
-| Fully-supervised | 99.09 | 96.45 |
-| Our MNIST Baseline | 96.73 | - |
-| Our Kannada-MNIST Baseline | - | 95.33 |
-| MNIST State-of-the-art [(Byerly et al., 2020)](#byerly2020) | 99.84 | - |
-| Kannada-MNIST Kaggle 1st place | - | 99.6 |
+| Model | MNIST | Kannada-MNIST | Dig-MNIST |
+|---|--:|--:|--:|
+| 1% semi-supervised| 98.95 | 88.16 | 59.49 |
+| 5% semi-supervised | 99.03 | 91.64 | 67.71 |
+| 10% semi-supervised | <span style="color:lime"> 99.19 </span> | 94.37 | 70.49 |
+| Fully-supervised | 99.09 | <span style="color:lime"> 96.45 </span> | <span style="color:lime"> 76.12 </span> |
+| Our MNIST Baseline | 96.73 | <span style="color:red"> 20.74 </span> | <span style="color:red"> 16.99 </span> |
+| Our Kannada-MNIST Baseline | <span style="color:red"> 24.21 </span> | 95.33 | 72.59 |
+| MNIST State-of-the-art [(Byerly et al., 2020)](#byerly2020) | <span style="color:cyan"> 99.84 </span> | - | - |
+| Kannada-MNIST Kaggle 1st place | - | <span style="color:cyan"> 99.6 </span> | - |
 
 ### Visualization of the Shared Latent Space
 
