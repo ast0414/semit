@@ -187,29 +187,51 @@ $$
 We use an alternating training procedure to solve this. Specifically, we first update $$D_1$$ and $$D_2$$ by applying a (stochastic) gradient **_ascent_** step while the parameters of the other modules are fixed. Then, $$E_1, E_2, G_1,$$ and $$G_2$$ are updated with a gradient **_descent_** step while $$D_1$$ and $$D_2$$ are fixed.
 
 # Experiments
+We conducted experiments to answer the following questions:
+* Is our translator model able to translate images to the target domain?
+* Are the translated images can be classified correctly by the target domain classifier model?
+* Is the shared latent space actually meaningful?
 
-For our experiment, we utilized our convolutional VAE that we created. We also used a baseline models for Kannada-MNIST datasets as well as a classification model of MNIST data. First, we ran our convolutional VAE model on the Kannada MNIST dataset that we retrieved from Kaggle. From the convolutional VAE, we obtained accuracy values that were then compared with the accuracy values of our baseline models for Kannada-MNIST data and MNIST data. This allowed us to ultimately determine whether our model that we created could translate Kannada numerical values effectively.
+## Setup
+### Dataset Preparation
+#### Source and Target Domain
+We use Kannada-MNIST as our source domain and MNIST as our target domain. In other words, our model aims to translate images of the Kannada numeral to ones look like typical arabic numerals. 
 
-## Baselines
+#### Train / Validation / Test Splits
+While we use the original splits of 60K training set and 10K test set for both dataset, we extract 5K samples as a validation set from each training set by using stratified random sampling.
 
-**_Sungtae will review this again_**
+TABLE or CHART
 
-We compared the results of our classification model to a baseline Kannada-MNIST model. The baseline model was a convulutional neural network with convolutional layers that had increasing output filter sizes (from 32 to 256), a dropout layers with a rate of 0.5 for each convolutional layer, a flatten layer, and a dense layer of 512x10 units. The baseline model showed us how accurately it could evaluate both Kannada-MNIST data and Dig-MNIST data. This model was a baseline. Therefore, it didn't have any changes/differences to how it was evaluating these datasets. It simply was taking in either Kannada-MNIST data or Dig-MNIST data and determining how accurately the model was classifying the test data. The accuracy of this baseline data can be used to compare with the accuracy we get from our MNIST classification model. This is because our MNIST classification model is classifying MNIST data that we obtained from our own CVAE implementation whereas the baseline model is classifying data we had gotten from another dataset.
+#### Amount of Supervision
+Assuming that a well-studied target domain dataset is available, we use the complete MNIST dataset with all labels. On the other hand, we do experiments with several possible scenarios regarding the source domain dataset. Specifically, we compare the classification accuracy of the translated images when we use the training set of Kannada-MNIST with no labels, partial labels, and all labels.
 
-We compared the results of our classification model to a baseline Kannada-MNIST model. The baseline model was a convulutional neural network with the following layers:
-* convolutional layers that had increasing output filter sizes (from 32 to 256)
-* a dropout layers with a rate of 0.5 for each convolutional layer
-* flatten layer
-* a dense layer of 512x10 units
+#### Preprocessing
+We use resized 32x32 images for the development convenience which are then normalized to the range of [0, 1] by default. Our translator models use shifted and re-scaled data whose range is [-1, 1].
 
-The classification model for MNIST data takes in the MNIST data obtained from the VAE model and creates a convolutional neural network with the following layers:
-* convolutional layers that had increasing output filter sizes (from 32 to 256)
-* leaky relu layer
-* dropout layer
-* flatten layer
-* dense layer with dimensions 512x10
+<!-- For our experiment, we utilized our convolutional VAE that we created. We also used a baseline models for Kannada-MNIST datasets as well as a classification model of MNIST data. First, we ran our convolutional VAE model on the Kannada MNIST dataset that we retrieved from Kaggle. From the convolutional VAE, we obtained accuracy values that were then compared with the accuracy values of our baseline models for Kannada-MNIST data and MNIST data. This allowed us to ultimately determine whether our model that we created could translate Kannada numerical values effectively. -->
+
+## Model Architecture
+All modules in our image-to-image translator are based on convolutional neural networks. The architecture of each module is summarized in the table below, where Nx is the number of filters in a convolutional (Conv2D) or transposed convolutional (TransConv2D) layer or the number of hidden units in a fully-connected (FC) layer, Kx is the kernel size, Sx is the stride size, and Px is the padding size. We use Batch Normalization [(Ioffe et al., 2015)](#ioffe2015) after each layer in the encoder and generator, and Dropout [(Srivastava et al., 2014)](#srivastava2014) of 0.5 drop rate after each layer in the discriminator. Leaky ReLU [(Maas et al., 2013)](#maas2013) activation function is mainly used except the last layers of the modules.
+
+| Layer | Encoder | Decoder/Generator | Discriminator |
+|---|---|---|---|
+| 1 | Conv2D(N32, K4, S2, P1) - BatchNorm - LeakyReLU | TransConv2D(N512, K4, S2, P1) - BatchNorm - LeakyReLU | Conv2D(N32, K4, S2, P1) - LeakyReLU - Dropout |
+| 2 | Conv2D(N64, K4, S2, P1) - BatchNorm - LeakyReLU | TransConv2D(N256, K4, S2, P1) - BatchNorm - LeakyReLU | Conv2D(N64, K4, S2, P1) - LeakyReLU - Dropout|
+| 3 | Conv2D(N128, K4, S2, P1) - BatchNorm - LeakyReLU | TransConv2D(N128, K4, S2, P1) - BatchNorm - LeakyReLU | Conv2D(N128, K4, S2, P1) - LeakyReLU - Dropout|
+| 4 | Conv2D(N256, K4, S2, P1) - BatchNorm - LeakyReLU | TransConv2D(N64, K4, S2, P1) - BatchNorm - LeakyReLU | Conv2D(N256, K4, S2, P1) - LeakyReLU - Dropout|
+| 5 | Conv2D(N512, K4, S2, P1) - BatchNorm - LeakyReLU | TransConv2D(N32, K4, S2, P1) - BatchNorm - Tanh | Conv2D(N512, K4, S2, P1) - LeakyReLU - Dropout|
+| 6a | $$\mu$$: Conv2D(N512, K1, S1, P0)  |   | Real/Fake: FC(N1) - Sigmoid|
+| 6b | $$\sigma$$: Conv2D(N512, K1, S1, P0) - Softplus |   | Class: FC(N10) - Softmax|
+
+## Baseline Classifiers
+
+We compare the classification accuracy of our translator model to a baseline classification model for each dataset. Each baseline classifier resembles the discriminator module in our translator model except there is no source discrimination (real/fake) head in the last layer. Each baseline classifier is trained using either dataset only and thus it is expected to perform well only for the domain where it was trained. On the other hand, our translator model is trained using both dataset regardless of the number of labeled training samples from the source domain; therefore, we expect that our translator well classifies samples from both domains using the discriminators $$D_1$$ or $$D_2$$.
+
+<!-- The baseline model showed us how accurately it could evaluate both Kannada-MNIST data and Dig-MNIST data. This model was a baseline. Therefore, it didn't have any changes/differences to how it was evaluating these datasets. It simply was taking in either Kannada-MNIST data or Dig-MNIST data and determining how accurately the model was classifying the test data. The accuracy of this baseline data can be used to compare with the accuracy we get from our MNIST classification model. This is because our MNIST classification model is classifying MNIST data that we obtained from our own CVAE implementation whereas the baseline model is classifying data we had gotten from another dataset.
+
 
 The baseline models showed us at what accuracy image to image translation should perform in order to be effective for both MNIST and Kannada-MNIST data. We used the baseline model of Kannada-MNIST data as the baseline model for Dig-MNIST data as well. The accuracy of this baseline data can be used to compare with the accuracy we get from our CVAE implementation.
+ -->
 
 ## Results
 Our results are depicted visually below. We have shown the loss curve of the CVAE implementation to show that our model is of good fit. We also visually show the translation between KMNIST and MNIST data from MNIST to KMNIST. Our classification performance, which compares the accuracy of each of our models, is also shown below. Finally, we depicted the shared latent space of each of the numerical digits in Kannada and the regular English digits.
@@ -288,6 +310,14 @@ concluding remarks
 <a name="odena2017"></a>[(Odena et al., 2017) Odena, Augustus, Christopher Olah, and Jonathon Shlens. "Conditional image synthesis with auxiliary classifier gans." Proceedings of the 34th International Conference on Machine Learning-Volume 70. JMLR. org, 2017.](https://dl.acm.org/doi/10.5555/3305890.3305954 "AC-GAN")
 
 <a name="byerly2020"></a>[(Byerly et al., 2020) Byerly, Adam, Tatiana Kalganova, and Ian Dear. "A Branching and Merging Convolutional Network with Homogeneous Filter Capsules." arXiv preprint arXiv:2001.09136 (2020).](https://arxiv.org/abs/2001.09136)
+
+<a name="ioffe2015"></a>[(Ioffe et al., 2015) Ioffe, Sergey, and Christian Szegedy. "Batch normalization: Accelerating deep network training by reducing internal covariate shift." arXiv preprint arXiv:1502.03167 (2015).](https://arxiv.org/abs/1502.03167)
+
+<a name="srivastava2014"></a>[(Srivastava et al., 2014) Srivastava, Nitish, et al. "Dropout: a simple way to prevent neural networks from overfitting." The journal of machine learning research 15.1 (2014): 1929-1958.](https://dl.acm.org/doi/10.5555/2627435.2670313)
+
+<a name="maas2013"></a>[(Maas et al., 2013) Maas, Andrew L., Awni Y. Hannun, and Andrew Y. Ng. "Rectifier nonlinearities improve neural network acoustic models." ICML Workshop on Deep Learning for Audio, Speech, and Language Processing (WDLASL), 2013.](https://ai.stanford.edu/~amaas/papers/relu_hybrid_icml2013_final.pdf)
+
+<a name="dugas2001"></a>[(Dugas et al., 2001) Dugas, Charles, et al. "Incorporating second-order functional knowledge for better option pricing." Advances in neural information processing systems. 2001.](https://papers.nips.cc/paper/1920-incorporating-second-order-functional-knowledge-for-better-option-pricing)
 
 # Cheat Sheet
 
