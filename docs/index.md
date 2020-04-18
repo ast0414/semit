@@ -20,7 +20,7 @@ The followings are example images of MNIST and K-MNIST data for each numeric cla
 | MNIST | Kannada |
 |:-|:-|
 | <img src="{{ site.baseurl }}/assets/images/MNIST_labeled.png" height="500" /> | <img src="{{ site.baseurl }}/assets/images/KMNIST_labeled.png" height="500" /> |
-| Credit: https://www.researchgate.net/figure/Example-images-from-the-MNIST-dataset_fig1_306056875 | Credit: https://towardsdatascience.com/a-new-handwritten-digits-dataset-in-ml-town-kannada-mnist-69df0f2d1456 |
+| Source: https://www.researchgate.net/figure/Example-images-from-the-MNIST-dataset_fig1_306056875 | Source: https://towardsdatascience.com/a-new-handwritten-digits-dataset-in-ml-town-kannada-mnist-69df0f2d1456 |
 
 # Background
 
@@ -32,7 +32,9 @@ Overall, the structure of an autoencoder can be outlined as followed (1):
 <p align="center">
     <img src="assets/images/autoencoders.png" alt="Autoencoders" />
     <br>
-    <em>Autoencoder. Source: "https://towardsdatascience.com/auto-encoder-what-is-it-and-what-is-it-used-for-part-1-3e5c6f017726"</em>
+    <em>Autoencoder</em>
+    <br>
+    Source: https://towardsdatascience.com/auto-encoder-what-is-it-and-what-is-it-used-for-part-1-3e5c6f017726
 </p>
 
 * Encoder: the neural network responsible that is responsible for learning how to perform dimensionality reduction and produce a representation  of the reduced data
@@ -46,7 +48,9 @@ Variational Autoencoder (VAE) is a specific framework within "generative modelin
 <p align="center">
     <img src="assets/images/vae.png" alt="VAE" />
     <br>
-    <em>Variational Autoencoder. Source: "https://towardsdatascience.com/understanding-variational-autoencoders-vaes-f70510919f73"</em>
+    <em>Variational Autoencoder</em>
+    <br>
+    Source: https://towardsdatascience.com/understanding-variational-autoencoders-vaes-f70510919f73
 </p>
 
 Under this model, the generation of new information is performed through the sampling within the distribution and processing of the decoder. To analyze the competency of VAE model, rather than implementing the use mean squared error between input and output, analysis is typically performed using a combination of reconstruction loss (the expected log-likelihood of specific data points) and latent loss (the Kullback-Leibler divergence, a quantification of the difference between two probability distributions, between the latent distribution and unit Gaussian).
@@ -128,8 +132,16 @@ In this section, we describe how the image-to-image translation model is trained
 ### Preliminaries
 Assuming that we have two image data domain $$X_1$$ and $$X_2$$, e.g., MNIST and Kannada-MNIST, samples from each domain are drawn from each marginal distribution $$P_{X_1}$$ and $$P_{X_2}$$.
 
-We represent the latent distribution $$q$$ and the latent codes $$z$$ drawn from this distribtuion as
-$$z_1 \sim q_1(z_1|x_1)$$ or $$z_2 \sim q_2(z_2|x_2)$$ according to the encoder input $$x_1 \in X_1$$ or $$x_2 \in X_2$$.
+In our translator model, the (variational) encoder outputs a mean vector $$E_{\mu}(x)$$ and a standard deviation vector $$E_{\sigma}(x)$$. Thus, we represent the latent distribution $$q$$ and the latent codes $$z$$ drawn from this distribtuion as
+
+$$
+\begin{align}
+z_1 \sim q_1(z_1|x_1) &\equiv \mathcal{N}(z_1 | E_{1,\mu}(x_1), E_{1,\sigma}(x_1))\\
+z_2 \sim q_2(z_2|x_2) &\equiv \mathcal{N}(z_2 | E_{2,\mu}(x_2), E_{2,\sigma}(x_2))
+\end{align}
+$$
+
+according to the encoder input $$x_1 \in X_1$$ or $$x_2 \in X_2$$. Also, we assume the standard normal distribution for the prior distribution of $$z$$.
 
 ### Loss and Objective Functions
 There are three different types of loss functions used in training of our image-to-image translation models. Each loss function has its own objective according to the role of the corresponding modules in the entire model.
@@ -197,16 +209,19 @@ We conducted experiments to answer the following questions:
 #### Source and Target Domain
 We use Kannada-MNIST as our source domain and MNIST as our target domain. In other words, our model aims to translate images of the Kannada numeral to ones look like typical arabic numerals. 
 
-#### Train / Validation / Test Splits
-While we use the original splits of 60K training set and 10K test set for both dataset, we extract 5K samples as a validation set from each training set by using stratified random sampling.
-
-TABLE or CHART
-
 #### Amount of Supervision
-Assuming that a well-studied target domain dataset is available, we use the complete MNIST dataset with all labels. On the other hand, we do experiments with several possible scenarios regarding the source domain dataset. Specifically, we compare the classification accuracy of the translated images when we use the training set of Kannada-MNIST with no labels, partial labels, and all labels.
+Assuming that a well-studied target domain dataset is available, we use the complete MNIST dataset with all labels. On the other hand, we do experiments with several possible scenarios regarding the source domain dataset. Specifically, we compare the classification accuracy of the translated images when we use the Kannada-MNIST training set with no labels, partial labels, and all labels.
 
 #### Preprocessing
 We use resized 32x32 images for the development convenience which are then normalized to the range of [0, 1] by default. Our translator models use shifted and re-scaled data whose range is [-1, 1].
+
+#### Train / Validation / Test Splits
+While we use the original splits of 60K training set and 10K test set for both dataset, we extract 5K samples as a validation set from each training set by using stratified random sampling.
+
+| Dataset | Train | Validation | Test |
+|:-:|:-:|:-:|:-:|
+| MNIST | ![MNIST Train]({{ site.baseurl }}/assets/images/mnist_train.png) | ![MNIST Val]({{ site.baseurl }}/assets/images/mnist_val.png) | ![MNIST Test]({{ site.baseurl }}/assets/images/mnist_test.png) |
+| Kannada | ![Kannada Train]({{ site.baseurl }}/assets/images/kannada_train.png) | ![Kannada Val]({{ site.baseurl }}/assets/images/kannada_val.png) | ![Kannada Test]({{ site.baseurl }}/assets/images/kannada_test.png) |
 
 <!-- For our experiment, we utilized our convolutional VAE that we created. We also used a baseline models for Kannada-MNIST datasets as well as a classification model of MNIST data. First, we ran our convolutional VAE model on the Kannada MNIST dataset that we retrieved from Kaggle. From the convolutional VAE, we obtained accuracy values that were then compared with the accuracy values of our baseline models for Kannada-MNIST data and MNIST data. This allowed us to ultimately determine whether our model that we created could translate Kannada numerical values effectively. -->
 
@@ -226,6 +241,8 @@ All modules in our image-to-image translator are based on convolutional neural n
 ## Baseline Classifiers
 
 We compare the classification accuracy of our translator model to a baseline classification model for each dataset. Each baseline classifier resembles the discriminator module in our translator model except there is no source discrimination (real/fake) head in the last layer. Each baseline classifier is trained using either dataset only and thus it is expected to perform well only for the domain where it was trained. On the other hand, our translator model is trained using both dataset regardless of the number of labeled training samples from the source domain; therefore, we expect that our translator well classifies samples from both domains using the discriminators $$D_1$$ or $$D_2$$.
+
+These comparisons allow us to ultimately determine whether our translator model could translate Kannada numeral images to arabic ones (and vice versa) effectively.
 
 <!-- The baseline model showed us how accurately it could evaluate both Kannada-MNIST data and Dig-MNIST data. This model was a baseline. Therefore, it didn't have any changes/differences to how it was evaluating these datasets. It simply was taking in either Kannada-MNIST data or Dig-MNIST data and determining how accurately the model was classifying the test data. The accuracy of this baseline data can be used to compare with the accuracy we get from our MNIST classification model. This is because our MNIST classification model is classifying MNIST data that we obtained from our own CVAE implementation whereas the baseline model is classifying data we had gotten from another dataset.
 
