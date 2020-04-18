@@ -154,7 +154,7 @@ $$\mathcal{L}_{\text{VAE}_1}(E_1, G_1) = \lambda_1 \text{KL}(q_1(z_1|x_1) \Vert 
 
 $$\mathcal{L}_{\text{VAE}_2}(E_2, G_2) = \lambda_1 \text{KL}(q_2(z_2|x_2) \Vert p_\eta (z)) - \lambda_2 \mathbb{E}_{z_2 \sim q_2(z_2|x_2)}[\log p_{G_2} (x_2 | z_2)]$$
 
-where the hyper-parameters $$\lambda_1$$ and $$\lambda_2$$ control the balance between the reconstruction error and the KL divergence of the latent distribution from its prior.
+where the hyper-parameters $$\lambda_1$$ and $$\lambda_2$$ control the balance between the reconstruction error and the KL divergence of the latent distribution from its prior. We used fixed values of $$\lambda_1 = 0.001$$ and $$\lambda_2 = 0.01$$ in this project following the configuration used by [(Liu et al., 2017)](#liu2017).
 
 #### GAN Objective
 Next, GAN objectives are used to enforce the translated images look like images from the target domain through the adversarial training of generators and discriminators. For example, $$D_1$$ tries to discriminates the real samples $$x_1 \sim X_1 $$ and the translated fake samples $$\widetilde{x}_1^2 = G_1(z_2)$$. On the other hand, $$G_1$$ tries to make $$D_1$$ classify $$\widetilde{x}_1^2$$ as real samples. It can be formulated by following equations:
@@ -185,7 +185,7 @@ $$
 \alpha_i = \eta \cdot \frac{\text{the number of all samples in } X_i}{\text{the number of labeled samples in } X_i}
 $$
 
-and $$\eta$$ is a hyper-parameters that controls the weight of classification loss.
+and $$\eta$$ is a hyper-parameters that controls the weight of classification loss. We use $$\eta=1$$ as a default value in this project.
 
 ### Joint Optimization
 Combining the losses and objective functions above together, we jointly optimize the following minimax problem:
@@ -199,10 +199,12 @@ $$
 We use an alternating training procedure to solve this. Specifically, we first update $$D_1$$ and $$D_2$$ by applying a (stochastic) gradient **_ascent_** step while the parameters of the other modules are fixed. Then, $$E_1, E_2, G_1,$$ and $$G_2$$ are updated with a gradient **_descent_** step while $$D_1$$ and $$D_2$$ are fixed.
 
 # Experiments
-We conducted experiments to answer the following questions:
+We conducted various experiments to answer the following questions:
 * Is our translator model able to translate images to the target domain?
 * Are the translated images can be classified correctly by the target domain classifier model?
 * Is the shared latent space actually meaningful?
+
+All experiments are done with Python 3.7 with several packages including PyTorch and TensorFlow. All source codes are available at [our project GitHub repository](https://github.com/ast0414/semit).
 
 ## Setup
 ### Dataset Preparation
@@ -223,8 +225,6 @@ While we use the original splits of 60K training set and 10K test set for both d
 | MNIST | ![MNIST Train]({{ site.baseurl }}/assets/images/mnist_train.png) | ![MNIST Val]({{ site.baseurl }}/assets/images/mnist_val.png) | ![MNIST Test]({{ site.baseurl }}/assets/images/mnist_test.png) |
 | Kannada | ![Kannada Train]({{ site.baseurl }}/assets/images/kannada_train.png) | ![Kannada Val]({{ site.baseurl }}/assets/images/kannada_val.png) | ![Kannada Test]({{ site.baseurl }}/assets/images/kannada_test.png) |
 
-<!-- For our experiment, we utilized our convolutional VAE that we created. We also used a baseline models for Kannada-MNIST datasets as well as a classification model of MNIST data. First, we ran our convolutional VAE model on the Kannada MNIST dataset that we retrieved from Kaggle. From the convolutional VAE, we obtained accuracy values that were then compared with the accuracy values of our baseline models for Kannada-MNIST data and MNIST data. This allowed us to ultimately determine whether our model that we created could translate Kannada numerical values effectively. -->
-
 ## Model Architecture
 All modules in our image-to-image translator are based on convolutional neural networks. The architecture of each module is summarized in the table below, where Nx is the number of filters in a convolutional (Conv2D) or transposed convolutional (TransConv2D) layer or the number of hidden units in a fully-connected (FC) layer, Kx is the kernel size, Sx is the stride size, and Px is the padding size. We use Batch Normalization [(Ioffe et al., 2015)](#ioffe2015) after each layer in the encoder and generator, and Dropout [(Srivastava et al., 2014)](#srivastava2014) of 0.5 drop rate after each layer in the discriminator. Leaky ReLU [(Maas et al., 2013)](#maas2013) activation function is mainly used except the last layers of the modules.
 
@@ -238,29 +238,26 @@ All modules in our image-to-image translator are based on convolutional neural n
 | 6a | $$\mu$$: Conv2D(N512, K1, S1, P0)  |   | Real/Fake: FC(N1) - Sigmoid|
 | 6b | $$\sigma$$: Conv2D(N512, K1, S1, P0) - Softplus |   | Class: FC(N10) - Softmax|
 
+The model parameters were optimized with Adam optimizer with learning late of 0.0002, $$\beta_1 = 0.5$$, and $$\beta_2=0.999$$. Our translator models were trained over 100 epochs with mini-batchs of 64 samples.
+
 ## Baseline Classifiers
 
 We compare the classification accuracy of our translator model to a baseline classification model for each dataset. Each baseline classifier resembles the discriminator module in our translator model except there is no source discrimination (real/fake) head in the last layer. Each baseline classifier is trained using either dataset only and thus it is expected to perform well only for the domain where it was trained. On the other hand, our translator model is trained using both dataset regardless of the number of labeled training samples from the source domain; therefore, we expect that our translator well classifies samples from both domains using the discriminators $$D_1$$ or $$D_2$$.
 
 These comparisons allow us to ultimately determine whether our translator model could translate Kannada numeral images to arabic ones (and vice versa) effectively.
 
-<!-- The baseline model showed us how accurately it could evaluate both Kannada-MNIST data and Dig-MNIST data. This model was a baseline. Therefore, it didn't have any changes/differences to how it was evaluating these datasets. It simply was taking in either Kannada-MNIST data or Dig-MNIST data and determining how accurately the model was classifying the test data. The accuracy of this baseline data can be used to compare with the accuracy we get from our MNIST classification model. This is because our MNIST classification model is classifying MNIST data that we obtained from our own CVAE implementation whereas the baseline model is classifying data we had gotten from another dataset.
-
-
-The baseline models showed us at what accuracy image to image translation should perform in order to be effective for both MNIST and Kannada-MNIST data. We used the baseline model of Kannada-MNIST data as the baseline model for Dig-MNIST data as well. The accuracy of this baseline data can be used to compare with the accuracy we get from our CVAE implementation.
- -->
 
 ## Results
 Our results are depicted visually below. We have shown the loss curve of the CVAE implementation to show that our model is of good fit. We also visually show the translation between KMNIST and MNIST data from MNIST to KMNIST. Our classification performance, which compares the accuracy of each of our models, is also shown below. Finally, we depicted the shared latent space of each of the numerical digits in Kannada and the regular English digits.
 
-### Loss Curve
-The CVAE obtained a loss function that is displayed below. This graph shows both the training and validation loss that was obtained. The first graph shows the loss for the MNIST dataset and the second graph shows the loss for the Kannada MNIST dataset:
+### Validation of VAE Module
+As the foremost step of the entire project, we trained and evaluated the VAE module, a set of the encoder and the generator, for each dataset independently first since it is a core of our translator model. The VAE loss values over about 200 epochs of training for each dataset are shown below.
 
-| MNIST | Kannada |
+| MNIST | Kannada-MNIST |
 |:-:|:-:|
-| <img src="{{ site.baseurl }}/assets/images/mnist_loss.png" width="370" height="320" /> | <img src="{{ site.baseurl }}/assets/images/kannada_loss.png" width="370" height="320" /> |
+| <img src="{{ site.baseurl }}/assets/images/mnist_loss.png" height="320" /> | <img src="{{ site.baseurl }}/assets/images/kannada_loss.png" height="320" /> |
 
-For both of these loss functions, we see that our model isn't overfitting nor underfitting. This means that our model can learn from a variety of datasets and can use what it has learned to evaluate generalized data.
+We confirmed that the VAE module is trained and perform well on both datasets with neither overfitting nor underfitting.
 
 ### Translation
 Below is a visual representation of our translation between Kannada numerals and Arabic numerals. As you can see, with our MNIST data as input, we translate the data through reconstruction and obtain an output of Kannada-MNIST data. With Kannada-MNIST data as an input, we can translate to obtain MNIST data. We show a 3 step process for the translation to and from Kannada numbers. Our first step is to obtain the input data. This input data is represented as either Arabic numerals (MNIST) or Kannada numerals (KMNIST). The second step is the reconstruction step. In this step, the model learns how to recreate our input data and create new data that matches the input data. Finally, the last step is the translation itself. This is where we utilize our CVAE to translate MNIST data to KMNIST data, and vice versa.
