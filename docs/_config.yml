@@ -14,12 +14,15 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 # title: GT CS7641 Project3 - Semi-supervised Image-to-image Translation
-title: GT CS7641 Project - Team3
+title: GT CS7641 SP2020 Project - Team3 Learning Machines<p align="center">Domain Adaptation<br>via<br>Semi-supervised Image-to-image Translation</p>
 email: stan84@gatech.edu
 description: >- # this means to ignore newlines until "baseurl:"
+  <span style="color:aqua">
+  ABSTRACT<br>
   Write an awesome description for your new site here. You can edit this
   line in _config.yml. It will appear in your document head meta (for
   Google search results) and in your feed.xml site description.
+  </span>
 baseurl: "/semit" # the subpath of your site, e.g. /blog
 url: "https://ast0414.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 #twitter_username: jekyllrb
