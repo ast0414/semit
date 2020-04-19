@@ -18,16 +18,18 @@ In this project, we extend the UNIT framework to cope with the situations that t
 
 ## MNIST and Kannada-MNIST
 
-The MNIST dataset is a commonly used dataset in machine learning. This dataset consists of images of size 28 pixels by 28 pixels. Each image contains a hand-drawn arabic numeral between 0 to 9 inclusive. Typically, this dataset is used to train a supervised machine learning model to predict an arabic numeral label for a given 28 by 28 pixel image.
+The MNIST dataset [(LeCun et al., 2010)](#lecun2010) is one of the most commonly used dataset in machine learning research. This dataset consists of 70K images of size 28 pixels by 28 pixels. Each image contains a hand-drawn arabic numeral between 0 to 9 inclusive. Due to its moderate size and label completeness, the MNIST dataset is widely used not only to train a handwritten digit recognition model but also as a benchmark dataset in developing many machine learning algorithms.
 
-The Kannada-MNIST, or K-MNIST, dataset is similar to the MNIST dataset except the images are of hand-drawn Kannada numerals instead of arabic numerals. For reference, Kannada is a language predominantly spoken in Karnataka (a state in the southwest of India). This dataset is fairly new, and some are still researching on how to train the most accurate model to predict the labels for this dataset.
+The Kannada-MNIST, or K-MNIST, dataset [(Prabhu, 2019)](#prabhu2019) is very similar to the MNIST dataset in terms of the number of samples and the size of each image except the images are of hand-drawn Kannada numerals instead of arabic numerals. For reference, Kannada is a language predominantly spoken in Karnataka (a state in the southwest of India). This dataset is fairly new, and there are ongoing researches on how to train the most accurate model to predict the labels for this dataset.
 
-The followings are example images of MNIST and K-MNIST data for each numeric class:
+Example images of MNIST and K-MNIST data for each numeric class are shown below. It is easy to notice that each digit representation is very different from each other, except 0, where Kannada numerals generally have more complicated strokes. Therefore, it is reasonable to assume that even a state-of-the-art MNIST classification model will have trouble on K-MNIST data.
 
 | MNIST | Kannada |
 |:-|:-|
 | <img src="{{ site.baseurl }}/assets/images/MNIST_labeled.png" height="500" /> | <img src="{{ site.baseurl }}/assets/images/KMNIST_labeled.png" height="500" /> |
 | Source: https://www.researchgate.net/figure/Example-images-from-the-MNIST-dataset_fig1_306056875 | Source: https://towardsdatascience.com/a-new-handwritten-digits-dataset-in-ml-town-kannada-mnist-69df0f2d1456 |
+
+
 
 # Background
 
@@ -393,7 +395,11 @@ In this project, we designed the (semi-)supervised image-to-image translator usi
 
 <a name="kingma2014"></a>[(Kingma and Welling, 2014) Kingma, Diederik P., and Max Welling. "Auto-encoding variational bayes." International Conference on Learning Representations (ICLR), 2014.](https://arxiv.org/abs/1312.6114)
 
-<a name="goodfellow2014"></a>[(Goodfellow et al, 2014) Goodfellow, Ian, et al. "Generative adversarial nets." Advances in neural information processing systems. 2014.](http://papers.nips.cc/paper/5423-generative-adversarial-nets)
+<a name="goodfellow2014"></a>[(Goodfellow et al., 2014) Goodfellow, Ian, et al. "Generative adversarial nets." Advances in neural information processing systems. 2014.](http://papers.nips.cc/paper/5423-generative-adversarial-nets)
+
+<a name="lecun2010"></a>[(LeCun et al., 2010) LeCun, Y., Cortes, C., and Burges, C. Mnist handwritten digit database. ATT Labs [Online], 2010.](http://yann.lecun.com/exdb/mnist)
+
+<a name="prabhu2019"></a>[(Prabhu, 2019) Prabhu, Vinay Uday. "Kannada-mnist: A new handwritten digits dataset for the kannada language." arXiv preprint arXiv:1908.01242 (2019).](https://arxiv.org/abs/1908.01242)
 
 <a name="odena2017"></a>[(Odena et al., 2017) Odena, Augustus, Christopher Olah, and Jonathon Shlens. "Conditional image synthesis with auxiliary classifier gans." Proceedings of the 34th International Conference on Machine Learning-Volume 70. JMLR. org, 2017.](https://dl.acm.org/doi/10.5555/3305890.3305954 "AC-GAN")
 
