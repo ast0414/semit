@@ -51,13 +51,22 @@ Variational Autoencoder (VAE) is a specific framework within "generative modelin
 
 Under this model, the generation of new information is performed through the sampling within the distribution and processing of the decoder. To analyze the competency of VAE model, rather than implementing the use mean squared error between input and output, analysis is typically performed using a combination of reconstruction loss (the expected log-likelihood of specific data points) and latent loss (the Kullback-Leibler divergence, a quantification of the difference between two probability distributions, between the latent distribution and unit Gaussian).
 
-<p align="center">
-    <img src="assets/images/vae_loss_function.PNG" alt="VAE_LOSS_F" />
-    <br>
-    <em>img source: "https://arxiv.org/abs/1907.08956"</em>
-</p>
+VAE Loss Function (3):
 
-In regards to the loss function, the left term represent to the latent loss (KL divergence) while the right term is the reconstruction loss, with J and L referring to the dimension of the latent vector z and sample size, respecitively. The goal of the VAE is to train the encoder and decoder so that their parameters θ* and φ*, respectively, result in the minimum loss function calculation (3).
+\begin{align*}
+Loss Function & = -\sum\limits_{j=1}^J \frac{1}{2} [1 + log(\sigma_i^2) - \sigma_i^2 - \mu_i^2] -\frac{1}{L} \sum\limits_{l} E_{\sim q_\theta(z \mid x_i)} [logp(x_i \mid z^{(i,l)}]
+\end{align*}
+
+
+In regards to the loss function, the left term represent to the latent loss (KL divergence) while the right term is the reconstruction loss, with J and L referring to the dimension of the latent vector z and sample size, respecitively. The goal of the VAE is to train the encoder and decoder so that their parameters θ* and φ*, respectively, result in the minimum loss function calculation.
+
+Optimal solution for Loss function:
+
+\begin{align*}
+(\theta^*, \phi^*) = argmin_{\theta, \phi}LossFunction(\theta, \phi)
+\end{align*}
+
+With $\theta^*$ and $\phi^*$ representing the encoder and decoder's parameters respectively.
 
 Variational autoencoders have been incorporated in literatures and practical scenarios for many different purposes, including the interpolation of facial images with respect to different attributes (age, hair color, expression, etc.). For this particular project, Variational Autoencoders is combined with Generative Adversarial Networks as part of a UNIT framework that is implemented for image-to-image translation, specifically, the translation from Kannada MNIST to MNIST digits.
 
