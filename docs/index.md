@@ -2,12 +2,19 @@
 layout: default
 ---
 
-# Intro
-We set out to try a new approach on generalization in machine learning algorithms. It is often hard to train a model on predicting labels for a given set of data that will perform well on new sets of data. Training a new model on new datasets may also be infeasible due difficulties like: a lack of labels or difficulty in collecting new data.
+# Introduction
 
-With our new approach to generalization, we hope to improve a neural network model's ability to classify to new datasets. To accomplish this, we are using a Variational Autoencoder (VAE) as well as a Generative Adversarial Network (GAN) to achieve accurate image-to-image translation. We use this translation as a form of domain adaptation.
+It is often hard to train a model on predicting labels for a given set of data that will perform well on new sets of data as well. In machine laerning community, thus, **_Generalization_** is an important aspect of algorithms to handle unseen data and to make correct decision/prediction on them on running time. There are several ways to improve the generalization of a machine learning algorithm such as L1/L2 regularization [(Ng, 2004)](#ng2004), Dropout [(Srivastava et al., 2014)](#srivastava2014) for neural networks, etc.
 
-As a proof-of-concept, we explore this model's ability to adapt the lesser known Kannada-MNIST dataset to images similar to the more well known MNIST dataset. Experimental results show that the image-to-image translator with an auxiliary classifier gives higher accuracy than the baseline models.
+On the other hand, training a new model on new datasets may also be infeasible due to challenges. Especially, it is difficult or even impossible to train a supervised model when there is a lack of labels for the new data. Acquiring a set of accurate labels for a new dataset is often challenging due to its nature of time and labor-intensive process.
+
+One of possible approches in such circumstance is **_domain adaptation_**, adapting a classifier trained using labeled samples in one domain (**_source domain_**) to classify samples in a new domain (**_target domain_**) while only a few of labeled samples in the new domain or none of them are available during training time. There have been early works in domain adaptation using subspace learning [(Fernando et al., 2013)](#fernando2013), deep feature learning [(Taigman et al., 2017)](#taigman2017), etc.
+
+[Liu et al. (2017)](#liu2017) proposed the UNsupervised Image-to-image Translation (UNIT) framework that combines Variational Autoencoders (VAEs) [(Kingma and Welling, 2014)](#kingma2014) and Genarative Adversarial Networks (GANs) [(Goodfellow et al, 2014)](#goodfellow2014) with a shared-latent space assumption and they showed the UNIT framework can be utilized in domain adaptation problems. As an unsupervised method, however, the UNIT framework is expected to work only when the two domains have similar feature representations, e.g., visual look for images, for the same semantic classes. For example, the datasets used in their domain adaptation experiments, MNIST, USPS, and SVHN, are different datasets having different colors or lighting environment, but they are all Arabic numeral images which is the most critical visual characteristic in the class decision.
+
+**_What if we need/want to apply domain adaption for datasets having totally different visual appearance for the same semantic classes?_** For example, MNIST and Kannda-MNIST, the datasets we will introduce shortly, both are handwritten digits datasets, but the former one contains Arabic numerals and the later one contains Kannada numerals.
+
+In this project, we extend the UNIT framework to cope with the situations that the target domain classes have different visual representations and few/none of labeled samples. By introducing auxiliary classifiers into the framework, our proposed method is able to produce accurate image-to-image translation between the domains despite of their different visual appreance. Furthermore, our experimental results show that the proposed translator model gives higher classification accuracy than the baseline models trained on fully-labeled dataset for both domains.
 
 ## MNIST and Kannada-MNIST
 
@@ -342,6 +349,8 @@ Meanwhile, we also compared the accuracy of our translator model to the aforemen
 
 Since the baseline classifiers were trained on each dataset only, they perform very poor on the other domain. On the other hand, our translator model performs well on both domain. Furthermore, our translator performs even better than the baseline classifier for each domain. It can be inferred that the translation task helps on regularization and thus the translator model generalizes well on the classification taks as well.
 
+There is still room for improvements
+
 ### Visualization of the Shared Latent Space
 Last but not least, we visualize the shared latent space learned by our translator model. We collected all latent vector $$z$$ from both datasets using the encoders $$E_1$$ and $$E_2$$ and construct 2-dimensional visualization embeddings using t-SNE [(Maaten 2014)](#maaten2014).
 
@@ -358,7 +367,7 @@ On the other hand, the lack of close connections across the domains for the two 
 <p align="center">
     <img src="assets/images/tsne.png" alt="tSNE" />
     <br>
-    <em>tSNE Plot</em>
+    <em>t-SNE visualization of the shared latent space</em>
 </p>
 
 # Conclusion
@@ -373,7 +382,18 @@ In this project, we designed the (semi-)supervised image-to-image translator usi
 - Everyone has equally contributed to web page creation
 
 # References
+
+<a name="ng2004"></a>[(Ng, 2004) Ng, Andrew Y. "Feature selection, L 1 vs. L 2 regularization, and rotational invariance." Proceedings of the twenty-first international conference on Machine learning. 2004.](https://dl.acm.org/doi/10.1145/1015330.1015435)
+
+<a name="fernando2013"></a>[(Fernando et al., 2013) Fernando, Basura, et al. "Unsupervised visual domain adaptation using subspace alignment." Proceedings of the IEEE international conference on computer vision. 2013.](http://openaccess.thecvf.com/content_iccv_2013/html/Fernando_Unsupervised_Visual_Domain_2013_ICCV_paper.html)
+
+<a name="taigman2017"></a>[(Taigman et al., 2017) Taigman, Yaniv, Adam Polyak, and Lior Wolf. "Unsupervised cross-domain image generation." International Conference on Learning Representations (ICLR), 2017.](https://arxiv.org/abs/1611.02200)
+
 <a name="liu2017"></a>[(Liu et al., 2017) Liu, Ming-Yu, Thomas Breuel, and Jan Kautz. "Unsupervised image-to-image translation networks." Advances in neural information processing systems. 2017.](http://papers.nips.cc/paper/6672-unsupervised-image-to-image-translation-network "UNIT")
+
+<a name="kingma2014"></a>[(Kingma and Welling, 2014) Kingma, Diederik P., and Max Welling. "Auto-encoding variational bayes." International Conference on Learning Representations (ICLR), 2014.](https://arxiv.org/abs/1312.6114)
+
+<a name="goodfellow2014"></a>[(Goodfellow et al, 2014) Goodfellow, Ian, et al. "Generative adversarial nets." Advances in neural information processing systems. 2014.](http://papers.nips.cc/paper/5423-generative-adversarial-nets)
 
 <a name="odena2017"></a>[(Odena et al., 2017) Odena, Augustus, Christopher Olah, and Jonathon Shlens. "Conditional image synthesis with auxiliary classifier gans." Proceedings of the 34th International Conference on Machine Learning-Volume 70. JMLR. org, 2017.](https://dl.acm.org/doi/10.5555/3305890.3305954 "AC-GAN")
 
