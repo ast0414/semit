@@ -195,7 +195,7 @@ $$\mathcal{L}_{\text{VAE}_2}(E_2, G_2) = \lambda_1 \text{KL}(q_2(z_2|x_2) \Vert 
 where the hyper-parameters $$\lambda_1$$ and $$\lambda_2$$ control the balance between the reconstruction error and the KL divergence of the latent distribution from its prior. We used fixed values of $$\lambda_1 = 0.001$$ and $$\lambda_2 = 0.01$$ in this project following the configuration used by [(Liu et al., 2017)](#liu2017).
 
 #### GAN Objective
-Next, GAN objectives are used to enforce the translated images look like images from the target domain through the adversarial training of generators and discriminators. For example, $$D_1$$ tries to discriminates the real samples $$x_1 \sim X_1 $$ and the translated fake samples $$\widetilde{x}_1^2 = G_1(z_2)$$. On the other hand, $$G_1$$ tries to make $$D_1$$ classify $$\widetilde{x}_1^2$$ as real samples. It can be formulated by following equations:
+Next, GAN objectives are used to enforce the translated images look like images from the source domain through the adversarial training of generators and discriminators. For example, $$D_1$$ tries to discriminates the real samples $$x_1 \sim X_1 $$ and the translated fake samples $$\widetilde{x}_1^2 = G_1(z_2)$$. On the other hand, $$G_1$$ tries to make $$D_1$$ classify $$\widetilde{x}_1^2$$ as real samples. It can be formulated by following equations:
 
 $$
 \mathcal{L}_{\text{GAN}_1}(E_2, G_1, D_1) = \mathbb{E}_{x_1 \sim P_{X_1}}[\log D_{1s}(x_1)] + \mathbb{E}_{z_2 \sim q_2(z_2|x_2)}[\log (1 - D_{1s}(G_1(z_2)))]
@@ -238,8 +238,8 @@ We use an alternating training procedure to solve this. Specifically, we first u
 
 # Experiments
 We conducted various experiments to answer the following questions:
-* Is our translator model able to translate images to the target domain?
-* Are the translated images can be classified correctly by the target domain classifier model?
+* Is our translator model able to translate images to the source domain?
+* Are the translated images can be classified correctly by the source domain classifier model?
 * Is the shared latent space actually meaningful?
 
 All experiments are done with Python 3.7 with several packages including PyTorch and TensorFlow. All source codes are available at [our project GitHub repository](https://github.com/ast0414/semit).
@@ -247,10 +247,10 @@ All experiments are done with Python 3.7 with several packages including PyTorch
 ## Setup
 ### Dataset Preparation
 #### Source and Target Domain
-We use K-MNIST as our source domain and MNIST as our target domain. In other words, our model aims to translate images of the Kannada numeral to ones look like typical arabic numerals. 
+We use MNIST as our source domain and K-MNIST as our target domain. In other words, our model aims to translate images of the Kannada numeral to ones look like typical arabic numerals for domain adaptation. 
 
 #### Amount of Supervision
-Assuming that a well-studied target domain dataset is available, we use the complete MNIST dataset with all labels. On the other hand, we do experiments with several possible scenarios regarding the source domain dataset. Specifically, we compare the classification accuracy of the translated images when we use the K-MNIST training set with no labels, partial labels, and all labels.
+Assuming that a well-studied source domain dataset is available, we use the complete MNIST dataset with all labels. On the other hand, we do experiments with several possible scenarios regarding the target domain dataset. Specifically, we compare the classification accuracy of the translated images when we use the K-MNIST training set with no labels, partial labels, and all labels.
 
 #### Preprocessing
 We use resized 32x32 images for the development convenience which are then normalized to the range of [0, 1] by default. Our translator models use shifted and re-scaled data whose range is [-1, 1].
@@ -280,7 +280,7 @@ The model parameters were optimized with Adam [(Kingma and Ba, 2015)](#kingma201
 
 ## Baseline Classifiers
 
-We compare the classification accuracy of our translator model to a baseline classification model for each dataset. Each baseline classifier resembles the discriminator module in our translator model except there is no source discrimination (real/fake) head in the last layer. Each baseline classifier is trained using either dataset only and thus it is expected to perform well only for the domain where it was trained. On the other hand, our translator model is trained using both dataset regardless of the number of labeled training samples from the source domain; therefore, we expect that our translator well classifies samples from both domains using the discriminators $$D_1$$ or $$D_2$$.
+We compare the classification accuracy of our translator model to a baseline classification model for each dataset. Each baseline classifier resembles the discriminator module in our translator model except there is no source discrimination (real/fake) head in the last layer. Each baseline classifier is trained using either dataset only and thus it is expected to perform well only for the domain where it was trained. On the other hand, our translator model is trained using both dataset regardless of the number of labeled training samples from the target domain; therefore, we expect that our translator well classifies samples from both domains using the discriminators $$D_1$$ or $$D_2$$.
 
 These comparisons allow us to ultimately determine whether our translator model could translate Kannada numeral images to arabic ones (and vice versa) effectively.
 
