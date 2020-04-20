@@ -58,7 +58,7 @@ While autoencoders have been proven to be effective models for data compression,
 
 #### Variational Autoencoders
 
-Variational Autoencoder (VAE) is a specific framework of "generative modeling" that deals with probabilistic distribution models of data points in the latent space. While structurally similar to an autoencoder, the encoder of VAE produces a distribution within the latent space rather than encoding a vector representation directly. This latent distribution is enforced to approximate a prior including but not limited to a normal distribution.
+Variational Autoencoder (VAE) [(Kingma and Welling, 2014)](#kingma2014) is a specific framework of "generative modeling" that deals with probabilistic distribution models of data points in the latent space. While structurally similar to an autoencoder, the encoder of VAE produces a distribution within the latent space rather than encoding a vector representation directly. This latent distribution is enforced to approximate a prior including but not limited to a normal distribution.
 
 <p align="center">
     <img src="assets/images/vae.png" alt="VAE" />
@@ -178,7 +178,7 @@ z_2 \sim q_2(z_2|x_2) &\equiv \mathcal{N}(z_2 | E_{2,\mu}(x_2), E_{2,\sigma}(x_2
 \end{align}
 $$
 
-according to the encoder input $$x_1 \in X_1$$ or $$x_2 \in X_2$$. Also, we assume the standard normal distribution for the prior distribution of $$z$$.
+according to the encoder input $$x_1 \in X_1$$ or $$x_2 \in X_2$$. Furthermore, we use the reparameterization trick [(Kingma and Welling, 2014)](#kingma2014) to enable backpropagation through the sampling operations of $$z$$. On the other hand, we assume the standard normal distribution for the prior distribution of $$z$$.
 
 ### Loss and Objective Functions
 There are three different types of loss functions used in training of our image-to-image translation models. Each loss function has its own objective according to the role of the corresponding modules in the entire model.
