@@ -19,9 +19,19 @@ email: stan84@gatech.edu
 description: >- # this means to ignore newlines until "baseurl:"
   <span style="color:aqua">
   ABSTRACT<br>
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  Generalization is an important aspect of machine learning algorithms
+  to handle unseen data and to make correct prediction on them on running time.
+  However, it is often difficult to train a supervised model,
+  especially for a classification task,
+  when there is a lack of labels for the new data.
+  On the other hand, acquiring a set of accurate labels for a new dataset
+  is often challenging since the process is mostly time and labor-intensive.
+  In this project, we propose a (semi-)supervised image-to-image translation framework as a domain adaptation method
+  based on a combination of variational autoencoders and generative adversarial networks upon a shared latent space assumption.
+  The proposed framework is able to effectively translate target domain images to source domain images,
+  which can be directly classified into the matched classes.
+  Experimental results show that stable translations as well as classification accuracy higher than baseline models
+  can be achieved even with a small amount of labels for the target domain data.
   </span>
 baseurl: "/semit" # the subpath of your site, e.g. /blog
 url: "https://ast0414.github.io" # the base hostname & protocol for your site, e.g. http://example.com
