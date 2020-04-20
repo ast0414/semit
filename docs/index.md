@@ -34,9 +34,11 @@ Example images of MNIST and K-MNIST data for each numeric class are shown below.
 # Background
 
 ## Variational Autoencoders
+
+#### Autoencoders
 In general, autoencoder is a form of unsupervised learning algorithm that implements the use of neural networks with the typical goal of data compression and dimensionality reduction.
 
-Overall, the structure of an autoencoder can be outlined as followed (1):
+Overall, the structure of an autoencoder can be outlined as follows:
 
 <p align="center">
     <img src="assets/images/autoencoders.png" alt="Autoencoders" />
@@ -46,13 +48,17 @@ Overall, the structure of an autoencoder can be outlined as followed (1):
     Source: https://towardsdatascience.com/auto-encoder-what-is-it-and-what-is-it-used-for-part-1-3e5c6f017726
 </p>
 
-* Encoder: the neural network responsible that is responsible for learning how to perform dimensionality reduction and produce a representation  of the reduced data
-* Bottleneck (latent space): the representation, in the form of a vector, of the input after compression is performed
+* Encoder: the neural network responsible for reducing dimensionality of the input data
+* Bottleneck (latent space): the reduced vector representation of the input after the compression
 * Decoder: the neural network responsible for reproducing the original input from the bottleneck
 
-Essentially, dimensionality reduction is performed through the training of the encoder and decoder in order to tune the neural networks' parameters and minimize reconstruction loss (which is typically represented as the mean squared error) between input and output. While autoencoders have been used and proven to be effective models for data compression, they cannot be used to generate new content just by having the decoder taking a sample vector within the latent space. This stems from the lack of regularization of the latent space by the autoencoder, whose learning and training processes direct towards the single goal of encoding and decoding the input. With the latent space constructed as distinct clusters by the encoder, thus exhibiting discontinuities, random sampling from such latent space and feeding it back into the decoder will result in non-meaningful output.
+Training of autoencoders typically done by minimizing the reconstruction loss, e.g., mean squared error, between the input and the output (the reconstructed input).
 
-Variational Autoencoder (VAE) is a specific framework within "generative modeling", which in itself, is an area of machine learning that deals with distribution models of data points within a high dimensional space. While structurally similar to an autoencoder, by which it also contains an encoder, decoder and latent space, to accomplish the generative process, VAE's encoder produces a distribution (enforced to approximate a standard normal distribution) within the latent space rather than encoding a vector representation (2).
+While autoencoders have been proven to be effective models for data compression, they cannot be used to generate new content just by having the decoder taking a sample vector from the latent space. This stems from the lack of regularization of the latent space by the autoencoder, whose learning and training processes direct towards the single goal of encoding and decoding the input. With the latent space constructed as distinct clusters by the encoder, thus exhibiting discontinuities, random sampling from such latent space and feeding it back into the decoder will result in non-meaningful output.
+
+#### Variational Autoencoders
+
+Variational Autoencoder (VAE) is a specific framework of "generative modeling" that deals with probabilistic distribution models of data points in the latent space. While structurally similar to an autoencoder, the encoder of VAE produces a distribution within the latent space rather than encoding a vector representation directly. This latent distribution is enforced to approximate a prior including but not limited to a normal distribution.
 
 <p align="center">
     <img src="assets/images/vae.png" alt="VAE" />
@@ -62,26 +68,18 @@ Variational Autoencoder (VAE) is a specific framework within "generative modelin
     Source: https://towardsdatascience.com/understanding-variational-autoencoders-vaes-f70510919f73
 </p>
 
-Under this model, the generation of new information is performed through the sampling within the distribution and processing of the decoder. To analyze the competency of VAE model, rather than implementing the use mean squared error between input and output, analysis is typically performed using a combination of reconstruction loss (the expected log-likelihood of specific data points) and latent loss (the Kullback-Leibler divergence, a quantification of the difference between two probability distributions, between the latent distribution and unit Gaussian).
+The loss function of VAE can be represented as the negative log-likelihood with a regularization term. For each single data point $$x_i$$, the loss function $$\mathcal{L}_i$$ is:
 
-<p align="center">
-    <img src="assets/images/vae_loss_function.PNG" alt="VAE_LOSS_F" />
-    <br>
-    <em>img source: "https://arxiv.org/abs/1907.08956"</em>
-</p>
+$$
+\large
+\mathcal{L}_i(\theta, \phi; x_i) = - \mathbb{E}_{z \sim q_\theta (z|x_i)} [\log p_\phi (x_i | z)] + \mathbb{KL}[q_\theta(z|x_i) \Vert p(z)]
+$$
 
-In regards to the loss function, the left term represent to the latent loss (KL divergence) while the right term is the reconstruction loss, with J and L referring to the dimension of the latent vector z and sample size, respecitively. The goal of the VAE is to train the encoder and decoder so that their parameters θ* and φ*, respectively, result in the minimum loss function calculation (3).
+where $$\theta$$ represents the encoder parameters and $$\phi$$ represents the decoder parameters.
 
-Variational autoencoders have been incorporated in literatures and practical scenarios for many different purposes, including the interpolation of facial images with respect to different attributes (age, hair color, expression, etc.). For this particular project, Variational Autoencoders is combined with Generative Adversarial Networks as part of a UNIT framework that is implemented for image-to-image translation, specifically, the translation from Kannada MNIST to MNIST digits.
+The first term is basically the reconstruction loss which encourages the role of VAE as an 'autoencoder'. On the other hand, the second term is the Kullback-Leibler (KL) divergence between the approximate posterior $$q_{\theta} (z \vert x_i)$$ and the latent prior $$p(z)$$ and it acts as a regularizer by forcing the latent distribution to be close to the prior. Please refer to [(Kingma and Welling, 2014)](#kingma2014) for more details.
 
-reference:
-
-(1- for img) https://towardsdatascience.com/auto-encoder-what-is-it-and-what-is-it-used-for-part-1-3e5c6f017726
-
-(2- for img) https://towardsdatascience.com/understanding-variational-autoencoders-vaes-f70510919f73
-
-(3- for img and explanation on VAE loss function) https://arxiv.org/abs/1907.08956
-
+VAEs have been incorporated in literatures and practical scenarios for many different purposes, including but not limited to the interpolation of facial images with respect to different attributes such as age, hair color, expression, etc. [(Yan et al., 2016)](#yan2016)
 
 ## Generative Adversarial Networks
 GAN stands for Generative Adversarial Network, which are deep-learning based generative models. GANs are a model architecture for training generative models which are widely used to translate inputs from one domain to another. GANs were first introduced in 2014 by Ian Goodfellow et al in a paper titled "[Generative Adversarial Networks]([https://arxiv.org/abs/1406.2661](https://arxiv.org/abs/1406.2661))" . While initially proposed as a model for unsupervised learning, GANs have also proved to be useful for semi-supervised learning, fully supervised learning and reinforcement learning.
@@ -173,6 +171,7 @@ Assuming that we have two image data domain $$X_1$$ and $$X_2$$, e.g., MNIST and
 In our translator model, the (variational) encoder outputs a mean vector $$E_{\mu}(x)$$ and a standard deviation vector $$E_{\sigma}(x)$$. Thus, we represent the latent distribution $$q$$ and the latent codes $$z$$ drawn from this distribtuion as
 
 $$
+\large
 \begin{align}
 z_1 \sim q_1(z_1|x_1) &\equiv \mathcal{N}(z_1 | E_{1,\mu}(x_1), E_{1,\sigma}(x_1))\\
 z_2 \sim q_2(z_2|x_2) &\equiv \mathcal{N}(z_2 | E_{2,\mu}(x_2), E_{2,\sigma}(x_2))
@@ -188,9 +187,13 @@ There are three different types of loss functions used in training of our image-
 First of all, the VAE losses are deployed to train the encoders $$E_i$$ and the decoders/generators $$G_i$$ to be able to reconstruct the samples from its own domain dataset $$X_i$$ using the stochastic samples $$z$$ from the shared latent space $$Z$$.
 The VAE loss function for each domain can be written as follows: 
 
-$$\mathcal{L}_{\text{VAE}_1}(E_1, G_1) = \lambda_1 \text{KL}(q_1(z_1|x_1) \Vert p_\eta (z)) - \lambda_2 \mathbb{E}_{z_1 \sim q_1(z_1|x_1)}[\log p_{G_1} (x_1 | z_1)]$$
-
-$$\mathcal{L}_{\text{VAE}_2}(E_2, G_2) = \lambda_1 \text{KL}(q_2(z_2|x_2) \Vert p_\eta (z)) - \lambda_2 \mathbb{E}_{z_2 \sim q_2(z_2|x_2)}[\log p_{G_2} (x_2 | z_2)]$$
+$$
+\large
+\begin{align}
+\mathcal{L}_{\text{VAE}_1}(E_1, G_1) &= \lambda_1 \text{KL}(q_1(z_1|x_1) \Vert p_\eta (z)) - \lambda_2 \mathbb{E}_{z_1 \sim q_1(z_1|x_1)}[\log p_{G_1} (x_1 | z_1)]\\
+\mathcal{L}_{\text{VAE}_2}(E_2, G_2) &= \lambda_1 \text{KL}(q_2(z_2|x_2) \Vert p_\eta (z)) - \lambda_2 \mathbb{E}_{z_2 \sim q_2(z_2|x_2)}[\log p_{G_2} (x_2 | z_2)]
+\end{align}
+$$
 
 where the hyper-parameters $$\lambda_1$$ and $$\lambda_2$$ control the balance between the reconstruction error and the KL divergence of the latent distribution from its prior. We used fixed values of $$\lambda_1 = 0.001$$ and $$\lambda_2 = 0.01$$ in this project following the configuration used by [(Liu et al., 2017)](#liu2017).
 
@@ -198,11 +201,11 @@ where the hyper-parameters $$\lambda_1$$ and $$\lambda_2$$ control the balance b
 Next, GAN objectives are used to enforce the translated images look like images from the source domain through the adversarial training of generators and discriminators. For example, $$D_1$$ tries to discriminates the real samples $$x_1 \sim X_1 $$ and the translated fake samples $$\widetilde{x}_1^2 = G_1(z_2)$$. On the other hand, $$G_1$$ tries to make $$D_1$$ classify $$\widetilde{x}_1^2$$ as real samples. It can be formulated by following equations:
 
 $$
-\mathcal{L}_{\text{GAN}_1}(E_2, G_1, D_1) = \mathbb{E}_{x_1 \sim P_{X_1}}[\log D_{1s}(x_1)] + \mathbb{E}_{z_2 \sim q_2(z_2|x_2)}[\log (1 - D_{1s}(G_1(z_2)))]
-$$
-
-$$
-\mathcal{L}_{\text{GAN}_2}(E_1, G_2, D_2) = \mathbb{E}_{x_2 \sim P_{X_2}}[\log D_{2s}(x_2)] + \mathbb{E}_{z_1 \sim q_1(z_1|x_1)}[\log (1 - D_{2s}(G_2(z_1)))]
+\large
+\begin{align}
+\mathcal{L}_{\text{GAN}_1}(E_2, G_1, D_1) &= \mathbb{E}_{x_1 \sim P_{X_1}}[\log D_{1s}(x_1)] + \mathbb{E}_{z_2 \sim q_2(z_2|x_2)}[\log (1 - D_{1s}(G_1(z_2)))]\\
+\mathcal{L}_{\text{GAN}_2}(E_1, G_2, D_2) &= \mathbb{E}_{x_2 \sim P_{X_2}}[\log D_{2s}(x_2)] + \mathbb{E}_{z_1 \sim q_1(z_1|x_1)}[\log (1 - D_{2s}(G_2(z_1)))]
+\end{align}
 $$
 
 where each $$D_{is}$$ refers to the discrimination output of $$D_i$$.
@@ -211,6 +214,7 @@ where each $$D_{is}$$ refers to the discrimination output of $$D_i$$.
 Finally, we also introduce the classification losses for the labeled samples, if any, to encourage matching the classes of the samples between two domains. For example, a translated sample $$\widetilde{x}_1^2 = G_1(E_2(x_2))$$ where $$x_2$$ has its label $$y_2$$ in the domain $$X_2$$ should be classified by $$D_1$$ as the same class in the domain $$X_1$$. It can be formulated by cross-entropy loss or negative log-likelihood: 
 
 $$
+\normalsize
 \begin{align}
 \mathcal{L}_{\text{CLASS}_1}(E_2, G_1, D_1) &= \alpha_1 \cdot {\underset { (x_1, y_1) \sim P_{X_{1}^{\text{labeled}}} }{\operatorname {\mathbb{E}} }}[−\log D_{1c}(y_1|x_1)] + \alpha_2 \cdot {\underset { z_2 \sim q_2(z_2|x_2), (x_2, y_2) \sim P_{X_{2}^{\text{labeled}}} }{\operatorname {\mathbb{E}} }}[−\log D_{1c}(y_2|G_1(x_2))]\\
 \mathcal{L}_{\text{CLASS}_2}(E_1, G_2, D_2) &= \alpha_2 \cdot {\underset { (x_2, y_2) \sim P_{X_{2}^{\text{labeled}}} }{\operatorname {\mathbb{E}} }}[−\log D_{2c}(y_2|x_2)] + \alpha_1 \cdot {\underset { z_1 \sim q_1(z_1|x_1), (x_1, y_1) \sim P_{X_{1}^{\text{labeled}}} }{\operatorname {\mathbb{E}} }}[−\log D_{2c}(y_1|G_2(x_1))]
@@ -220,6 +224,7 @@ $$
 where $$\alpha_i$$
 
 $$
+\large
 \alpha_i = \eta \cdot \frac{\text{the number of all samples in } X_i}{\text{the number of labeled samples in } X_i}
 $$
 
@@ -229,6 +234,7 @@ and $$\eta$$ is a hyper-parameters that controls the weight of classification lo
 Combining the losses and objective functions above together, we jointly optimize the following minimax problem:
 
 $$
+\large
 \begin{align}
 {\underset { E_1, E_2, G_1, G_2 }{\operatorname { min } }} \;\; {\underset { D_1, D_2 }{\operatorname { max } }} \quad & \mathcal{L}_{\text{VAE}_1}(E_1, G_1) + \mathcal{L}_{\text{GAN}_1}(E_2, G_1, D_1) + \mathcal{L}_{\text{CLASS}_1}(E_2, G_1, D_1)\\ + &\mathcal{L}_{\text{VAE}_2}(E_2, G_2) + \mathcal{L}_{\text{GAN}_2}(E_1, G_2, D_2) + \mathcal{L}_{\text{CLASS}_2}(E_1, G_2, D_2)
 \end{align}
@@ -301,11 +307,11 @@ We confirmed that the VAE module is trained and perform well on both datasets wi
 To answer the first main question at the beginning of this section, we show how our model successfully translate the images. Visual representations of our translation between Kannada numerals (K-MNIST) and Arabic numerals (MNIST) are shown in the table below. For each dataset (row), each column contains a GIF image as a progress recording over the training epochs for the followings:
 
 1. The first column shows the input images to our model:<br>
-$$x_1 \sim X_1$$ (MNIST) or $$x_2 \sim X_2$$ (K-MNIST)
+$$\large x_1 \sim X_1$$ (MNIST) or $$x_2 \sim X_2$$ (K-MNIST)
 2. The second column shows the reconstructed images by the VAE modules for each domain itself:<br>
-$$\widetilde{x}_1^1 = G_1(E_1(x_1))$$ or $$\widetilde{x}_2^2 = G_2(E_2(x_2))$$
+$$\large \widetilde{x}_1^1 = G_1(E_1(x_1))$$ or $$\widetilde{x}_2^2 = G_2(E_2(x_2))$$
 3. The last column contains the translated images between the domains:<br>
-$$\widetilde{x}_1^2 = G_2(E_1(x_1))$$ or $$\widetilde{x}_2^1 = G_1(E_2(x_2))$$ 
+$$\large \widetilde{x}_1^2 = G_2(E_1(x_1))$$ or $$\widetilde{x}_2^1 = G_1(E_2(x_2))$$ 
 
 | Dataset | Input $$X_i$$ | Reconstruction $$X_i \rightarrow \widetilde{X}_i^i$$ | Translation $$X_i \rightarrow \widetilde{X}_j^i$$|
 |:-:|:-:|:-:|:-:|
@@ -400,6 +406,8 @@ In this project, we designed the (semi-)supervised image-to-image translator usi
 <a name="lecun2010"></a>[(LeCun et al., 2010) LeCun, Y., Cortes, C., and Burges, C. Mnist handwritten digit database. ATT Labs [Online], 2010.](http://yann.lecun.com/exdb/mnist)
 
 <a name="prabhu2019"></a>[(Prabhu, 2019) Prabhu, Vinay Uday. "Kannada-mnist: A new handwritten digits dataset for the kannada language." arXiv preprint arXiv:1908.01242 (2019).](https://arxiv.org/abs/1908.01242)
+
+<a name="yan2016"></a>[(Yan et al., 2016) Yan, Xinchen, et al. "Attribute2image: Conditional image generation from visual attributes." European Conference on Computer Vision. Springer, Cham, 2016.](https://link.springer.com/chapter/10.1007/978-3-319-46493-0_47)
 
 <a name="odena2017"></a>[(Odena et al., 2017) Odena, Augustus, Christopher Olah, and Jonathon Shlens. "Conditional image synthesis with auxiliary classifier gans." Proceedings of the 34th International Conference on Machine Learning-Volume 70. JMLR. org, 2017.](https://dl.acm.org/doi/10.5555/3305890.3305954 "AC-GAN")
 
