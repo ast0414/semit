@@ -247,10 +247,10 @@ All experiments are done with Python 3.7 with several packages including PyTorch
 ## Setup
 ### Dataset Preparation
 #### Source and Target Domain
-We use MNIST as our source domain and K-MNIST as our target domain. In other words, our model aims to translate images of the Kannada numeral to ones look like typical arabic numerals for domain adaptation. 
+We used MNIST as our source domain and K-MNIST as our target domain. In other words, our model aims to translate images of Kannada numerals to ones that look like typical Arabic numerals for domain adaptation. 
 
 #### Amount of Supervision
-Assuming that a well-studied source domain dataset is available, we use the complete MNIST dataset with all labels. On the other hand, we do experiments with several possible scenarios regarding the target domain dataset. Specifically, we compare the classification accuracy of the translated images when we use the K-MNIST training set with no labels, partial labels, and all labels.
+Assuming that a well-studied source domain dataset is available, we use the complete MNIST dataset with all labels. We also do experiments with several possible scenarios regarding the target domain dataset. Specifically, we compare the classification accuracy of the translated images when we use the K-MNIST training set with no labels, partial labels, and all labels.
 
 #### Preprocessing
 We use resized 32x32 images for the development convenience which are then normalized to the range of [0, 1] by default. Our translator models use shifted and re-scaled data whose range is [-1, 1].
@@ -280,9 +280,9 @@ The model parameters were optimized with Adam [(Kingma and Ba, 2015)](#kingma201
 
 ## Baseline Classifiers
 
-We compare the classification accuracy of our translator model to a baseline classification model for each dataset. Each baseline classifier resembles the discriminator module in our translator model except there is no source discrimination (real/fake) head in the last layer. Each baseline classifier is trained using either dataset only and thus it is expected to perform well only for the domain where it was trained. On the other hand, our translator model is trained using both dataset regardless of the number of labeled training samples from the target domain; therefore, we expect that our translator well classifies samples from both domains using the discriminators $$D_1$$ or $$D_2$$.
+We compared the classification accuracy of our translator model to a baseline classification model for each dataset. Each baseline classifier resembles the discriminator module in our translator model except there is no source discrimination (real/fake) head in the last layer. Each baseline classifier is trained using either dataset only, and thus it is expected to perform well only for the domain where it was trained. On the other hand, our translator model is trained using both datasets regardless of the number of labeled training samples from the target domain; therefore, we expect that our translator well classifies samples from both domains using the discriminators $$D_1$$ or $$D_2$$.
 
-These comparisons allow us to ultimately determine whether our translator model could translate Kannada numeral images to arabic ones (and vice versa) effectively.
+These comparisons allow us to ultimately determine whether our translator model could translate Kannada numeral images to Arabic ones (and vice versa) effectively.
 
 
 ## Results
@@ -328,9 +328,9 @@ All different translators classify MNIST images well with a high accuracy of abo
 
 On the other hand, the accuracy of our K-MNIST data translation increases from unsupervised learning to fully supervised learning. Using unsupervised learning for K-MNIST translation, our accuracy was about 3%, showing that our model couldn't translate images effectively. However, as Fowlkes-Mallows score shows, there are still some well-formed clusters. We can infer from this that there exists some mapping between K-MNIST class and MNIST class even though their numeric values are not matched due to the lack of supervision by labels. 
 
-With a 1% semi-supervised learning, the accuracy increased tremendously for K-MNIST data translation -- the accuracy was about 88%. This shows that even with a small amount of labeled data, our model can translate at a greater performance. This is further shown with the increase in accuracy for 5% semi-supervised learning (accuracy is about 92%) and for 10% semi-supervised learning (accuracy is about 94%). The highest accuracy achieved with K-MNIST data translation was about 96% accuracy. This was achieved with fully-supervised learning. In sum, with more labeled data, our model can translate Kannada MNIST data better.
+With a 1% semi-supervised learning, the accuracy increased tremendously for K-MNIST data translation -- the accuracy was about 88%. This shows that even with a small amount of labeled data, our model can translate at a greater performance. This is further shown with the increase in accuracy for 5% semi-supervised learning (accuracy is about 92%) and for 10% semi-supervised learning (accuracy is about 94%). The highest accuracy achieved with K-MNIST data translation was about 96% accuracy. This was achieved with fully-supervised learning. Therefore, with more labeled data, our model can translate Kannada MNIST data better.
 
-It applies same for Dig-MNIST data, where the accuracy also shows an increasing trend as the learning becomes more supervised, from 3% for the unsupervised translation to 76% for the fully-supervised translation.
+The same trend also occurred for Dig-MNIST data. The accuracy showed an increasing trend as the learning became more supervised from 3% for the unsupervised translation to 76% for the fully-supervised translation.
 
 <!-- For unsupervised learning, the accuracy is about 3%. For 1% semi supervised, the accuracy found was about 59%. For 5% semi supervised, the accuracy is about 67%. For 10% semi supervised, teh accuracy is about 70%. Finally, for fully supervised learning the accuracy is about 75%. Though we have shown that with more labeled data our model can have a higher accuracy with translating Dig MNIST, the highest accuracy obtained was only about 75%, which means that there are still some errors in translation for Dig MNIST. -->
 
@@ -351,14 +351,14 @@ Meanwhile, we also compared the accuracy of our translator model to the aforemen
 
 Since the baseline classifiers were trained on each dataset only, they perform very poor on the other domain. On the other hand, our translator model performs well on both domain. Furthermore, our translator performs even better than the baseline classifier for each domain. It can be inferred that the translation task helps on regularization and thus the translator model generalizes well on the classification taks as well.
 
-There is still room for improvements
+There is still room for improvements.
 
 ### Visualization of the Shared Latent Space
-Last but not least, we visualize the shared latent space learned by our translator model. We collected all latent vector $$z$$ from both datasets using the encoders $$E_1$$ and $$E_2$$ and construct 2-dimensional visualization embeddings using t-SNE [(Maaten 2014)](#maaten2014).
+Last but not least, we visualized the shared latent space learned by our translator model. We collected all latent vector $$z$$ from both datasets using the encoders $$E_1$$ and $$E_2$$ and construct 2-dimensional visualization embeddings using t-SNE [(Maaten 2014)](#maaten2014).
 
-The visualization below shows that the most corresponding digits of Kannada and Arabic numbers, except 0 and 6, are adjacent to each other in the shared latent space learned, which represents the clustered relationships between two different domains that enable translations between them.
+The visualization below shows that the most corresponding digits of Kannada and Arabic numbers, except 0 and 6, are adjacent to each other in the shared latent space learned. This represents the clustered relationships between two different domains that enable translations between them.
 
-On the other hand, the lack of close connections across the domains for the two numerals, 0 and 6, in the shared latent space might be a possible reason as to why the classification accuracy of K-MNIST after translation is not same as MNIST; the translator might have difficulties on translating them due to the lack of the connections.
+There does exist a lack of close connections across the domains for the two numerals, 0 and 6, in the shared latent space. This might be a possible reason as to why the classification accuracy of K-MNIST after translation is not same as MNIST; the translator might have difficulties on translating them due to the lack of the connections.
 
 <!-- What the visualization below shows is the shared latent space. Latent space helps find a relationship between 2 different domains so that transformations can occur between those 2 domains. When there is a shared latent space, we know that those 2 domains can basically be translated from one to another. What the visualization below shows is that the shared latent space found is between the corresponding digits of Kannada and Arabic numbers. For the most part, each domain in Arabic has a corresponding domain in Kannada that is correct -- the 1s, 2s, 3s, 4s, 5s, 7s, 8s, and 9s match each other. There is no shared latent space between each languages 0s and 6s. The lack of shared latent space between these 2 numerals is a possible reason as to why the accuracy of translation between MNIST and K-MNIST isn't 100%. -->
 
@@ -373,7 +373,7 @@ On the other hand, the lack of close connections across the domains for the two 
 </p>
 
 # Conclusion
-In this project, we designed the (semi-)supervised image-to-image translator using neural networks. It was shown that our translator model is able to translate images between two domains, from K-MNIST to MNIST and vice versa, effectively. Also, our translator model can directly classify the images from both domains. Furthermore, our translator model can be trained with even a small amount of labels for the dataset to be translated. It was enabled by the shared latent space that connects two different data domains together, which was visually confirmed.
+In this project, we designed the (semi-)supervised image-to-image translator using neural networks. It was shown that our translator model was able to translate images between two domains, from K-MNIST to MNIST and vice versa, effectively. Our translator model can also directly classify the images from both domains. Furthermore, our translator model can be trained with even a small amount of labels for the dataset to be translated. It was enabled by the shared latent space that connects two different data domains together, which was visually confirmed.
 
 # Contributions
 - Anh: Led the study and discussion about VAE
