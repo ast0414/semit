@@ -250,7 +250,7 @@ All experiments are done with Python 3.7 with several packages including PyTorch
 We used MNIST as our source domain and K-MNIST as our target domain. In other words, our model aims to translate images of Kannada numerals to ones that look like typical Arabic numerals for domain adaptation. 
 
 #### Amount of Supervision
-Assuming that a well-studied source domain dataset is available, we use the complete MNIST dataset with all labels. We also do experiments with several possible scenarios regarding the target domain dataset. Specifically, we compare the classification accuracy of the translated images when we use the K-MNIST training set with no labels, partial labels, and all labels.
+Assuming that a well-studied source domain dataset is available, we use the complete MNIST dataset with all labels. On the other hand, we do experiments with several possible scenarios regarding the target domain dataset. Specifically, we compare the classification accuracy of the translated images when we use the K-MNIST training set with no labels, partial labels, and all labels.
 
 #### Preprocessing
 We use resized 32x32 images for the development convenience which are then normalized to the range of [0, 1] by default. Our translator models use shifted and re-scaled data whose range is [-1, 1].
