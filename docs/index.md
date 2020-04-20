@@ -29,13 +29,11 @@ Example images of MNIST and K-MNIST data for each numeric class are shown below.
 | <img src="{{ site.baseurl }}/assets/images/MNIST_labeled.png" height="500" /> | <img src="{{ site.baseurl }}/assets/images/KMNIST_labeled.png" height="500" /> |
 | Source: https://www.researchgate.net/figure/Example-images-from-the-MNIST-dataset_fig1_306056875 | Source: https://towardsdatascience.com/a-new-handwritten-digits-dataset-in-ml-town-kannada-mnist-69df0f2d1456 |
 
-
-
 # Background
 
 ## Variational Autoencoders
 
-#### Autoencoders
+### Autoencoders
 In general, autoencoder is a form of unsupervised learning algorithm that implements the use of neural networks with the typical goal of data compression and dimensionality reduction.
 
 Overall, the structure of an autoencoder can be outlined as follows:
@@ -48,15 +46,17 @@ Overall, the structure of an autoencoder can be outlined as follows:
     Source: https://towardsdatascience.com/auto-encoder-what-is-it-and-what-is-it-used-for-part-1-3e5c6f017726
 </p>
 
-* Encoder: the neural network responsible for reducing dimensionality of the input data
-* Bottleneck (latent space): the reduced vector representation of the input after the compression
-* Decoder: the neural network responsible for reproducing the original input from the bottleneck
+* **_Encoder_**: a neural network responsible for reducing dimensionality of the input data
+
+* **_Bottleneck (latent space)_**: the reduced vector representation of the input after the compression
+
+* **_Decoder_**: a neural network responsible for reproducing the original input from the bottleneck
 
 Training of autoencoders typically done by minimizing the reconstruction loss, e.g., mean squared error, between the input and the output (the reconstructed input).
 
 While autoencoders have been proven to be effective models for data compression, they cannot be used to generate new content just by having the decoder taking a sample vector from the latent space. This stems from the lack of regularization of the latent space by the autoencoder, whose learning and training processes direct towards the single goal of encoding and decoding the input. With the latent space constructed as distinct clusters by the encoder, thus exhibiting discontinuities, random sampling from such latent space and feeding it back into the decoder will result in non-meaningful output.
 
-#### Variational Autoencoders
+### Variational Autoencoders
 
 Variational Autoencoder (VAE) [(Kingma and Welling, 2014)](#kingma2014) is a specific framework of "generative modeling" that deals with probabilistic distribution models of data points in the latent space. While structurally similar to an autoencoder, the encoder of VAE produces a distribution within the latent space rather than encoding a vector representation directly. This latent distribution is enforced to approximate a prior including but not limited to a normal distribution.
 
@@ -82,17 +82,17 @@ The first term is basically the reconstruction loss which encourages the role of
 VAEs have been incorporated in literatures and practical scenarios for many different purposes, including but not limited to the interpolation of facial images with respect to different attributes such as age, hair color, expression, etc. [(Yan et al., 2016)](#yan2016)
 
 ## Generative Adversarial Networks
-GAN stands for Generative Adversarial Network, which are deep-learning based generative models. GANs are a model architecture for training generative models which are widely used to translate inputs from one domain to another. GANs were first introduced in 2014 by Ian Goodfellow et al in a paper titled "[Generative Adversarial Networks]([https://arxiv.org/abs/1406.2661](https://arxiv.org/abs/1406.2661))" . While initially proposed as a model for unsupervised learning, GANs have also proved to be useful for semi-supervised learning, fully supervised learning and reinforcement learning.
+Generative Adversarial Network (GAN) [(Goodfellow et al, 2014)](#goodfellow2014) is another framework of deep-learning based generative models, which is widely used to translate inputs from one domain to another. While initially proposed as a model for unsupervised learning, GANs have been also proved to be useful for semi-supervised learning, fully supervised learning, and reinforcement learning.
 
-The GAN model involves two sub-models:
+Most GAN type of models involves two sub-models:
 
-1. **Generator Model** - This is a model that is used to generate new examples from the problem domain.
+- **_Generator_** (G): a neural network used to generate new examples from the problem domain.
 
 	The input to the model is a vector from a multidimensional space. After training with the dataset, this multidimensional space is mapped to corresponding points in the problem domain. This forms a compressed representation of the multidimensional data space.
 
 	After training, the generator model is used to generate new samples.
 
-2. **Discriminator Model** - This model is used to classify example inputs based on whether they come from the problem domain or from the generated examples.
+- **_Discriminator_** (D): a neural network used to classify example inputs based on whether they come from the problem domain or from the generated examples.
 
 	The model inputs an example from the domain (real or generated) and classifies it with a binary label *real* or *fake*. The *real* examples come from the training dataset, while the *fake* examples come from the generator model.
 
@@ -100,9 +100,11 @@ The GAN model involves two sub-models:
     <img src="https://www.researchgate.net/profile/Emiliano_De_Cristofaro/publication/317061929/figure/fig1/AS:497029693362176@1495512521469/Generative-Adversarial-Network-GAN.png" alt="GAN" />
     <br>
     <em>Generative Adversarial Network</em>
+    <br>
+    Source: <a href="#hayes2019">(Hayes et al., 2019)</a>
 </p>
 
-#### Objective Function
+<!-- #### Objective Function
  
  In utilizing a GAN, we aim to optimize the objective function as described below. First, let us define some variables:
 <p align="center">
@@ -118,11 +120,20 @@ The following is a quick look at the cost functions for the Discriminator and Ge
     <br>
 </p>
 
-Once these losses are calculated, the value of their gradient is calculated w.r.t their parameters and back propagated through the individual models.
+Once these losses are calculated, the value of their gradient is calculated w.r.t their parameters and back propagated through the individual models. -->
 
-In essence, D and G play a two-player, minimax game to optimize the value of the expectation objective function:
+In terms of training a GAN, in essence, D and G play a two-player minimax game to optimize the expected value of the objective function:
 
-<p align="center">
+$$
+\large
+\begin{align}
+{\underset { G }{\operatorname { min } }} \; {\underset { D }{\operatorname { max } }} \quad & \mathbb{E}_{x \sim p_{\text{data}}(x)}[\log D(x)] + \mathbb{E}_{z_ \sim p(z)}[\log (1 - D(G(z)))]
+\end{align}
+$$
+
+where D is optimized to recognize the real and fake samples correctly while G is trained to fool the discriminator as much as possible by creating fake samples mimicking the real samples.
+
+<!-- <p align="center">
     <img src="assets/images/GANloss2.png" alt="Objective function" />
     <br>
 </p>
@@ -130,11 +141,12 @@ In essence, D and G play a two-player, minimax game to optimize the value of the
 <p align="center">
     <img src="assets/images/GANloss3.jpeg" alt="Min and max portions" />
     <br>
-</p>
+</p> -->
 
-A key use of generative adversarial networks comes in image-to-image translation, to map images from the input domain to a different output domain.
+<!-- A key use of generative adversarial networks comes in image-to-image translation, to map images from the input domain to a different output domain. -->
 
-Images and equations source: [https://medium.com/deep-math-machine-learning-ai/ch-14-general-adversarial-networks-gans-with-math-1318faf46b43](https://medium.com/deep-math-machine-learning-ai/ch-14-general-adversarial-networks-gans-with-math-1318faf46b43)
+<!-- Images and equations source: [https://medium.com/deep-math-machine-learning-ai/ch-14-general-adversarial-networks-gans-with-math-1318faf46b43](https://medium.com/deep-math-machine-learning-ai/ch-14-general-adversarial-networks-gans-with-math-1318faf46b43) -->
+
 # Image-to-Image Translation Networks
 In this project, we use a framework that combines VAE and GAN to perform image-to-image translation tasks.
 Specifically, we adopt the UNIT framework proposed by [Liu et al. (2017)](#liu2017), which was used in unsupervised image-to-image translation tasks, while we further extend it to semi-supervised and fully-supervised image translation tasks.
@@ -150,11 +162,11 @@ The overall framework of our proposed model is depicted in the following figure.
 
 It is a combination of VAE and GAN architecture that consists of the following modules:
 
-* **Encoders**: each encoder $$E_i$$ encodes samples from a source domain data $$X_1$$ or a target domain data $$X_2$$ into a shared latent space<sup>[*](#shared)</sup> $$Z$$.
+* **_Encoders_**: each encoder $$E_i$$ encodes samples from a source domain data $$X_1$$ or a target domain data $$X_2$$ into a shared latent space<sup>[*](#shared)</sup> $$Z$$.
 
-* **Decoders/Generators**: each decoder (in terms of VAE) or generator (in terms of GAN) $$G_i$$ reconstructs samples $$\widetilde{X}_{i}^{j}$$ using latent vectors $$z$$ where the subscript $$i$$ means the decoder's own domain and the superscript $$j$$ means the sample's origin domain. For example, $$\widetilde{X}_1^2$$ represents the samples reconstructed in $$X_1$$ domain using the latent vectors encoded using the input data from $$X_2$$ domain.
+* **_Decoders/Generators_**: each decoder (in terms of VAE) or generator (in terms of GAN) $$G_i$$ reconstructs samples $$\widetilde{X}_{i}^{j}$$ using latent vectors $$z$$ where the subscript $$i$$ means the decoder's own domain and the superscript $$j$$ means the sample's origin domain. For example, $$\widetilde{X}_1^2$$ represents the samples reconstructed in $$X_1$$ domain using the latent vectors encoded using the input data from $$X_2$$ domain.
 
-* **Discriminators**: each discriminator $$D_i$$ judges whether inputs are the **_real_** samples from the domain $$X_i$$ or **_fake (translated)_** samples, i.e., $$\widetilde{X}_1^2$$ or $$\widetilde{X}_2^1$$. At the same time, each discriminator $$D_i$$ also gives class predictions for input samples, regardless of whether they are real or fake, similar to the one used in AC-GAN [(Odena et al., 2017)](#odena2017).
+* **_Discriminators_**: each discriminator $$D_i$$ judges whether inputs are the **_real_** samples from the domain $$X_i$$ or **_fake (translated)_** samples, i.e., $$\widetilde{X}_1^2$$ or $$\widetilde{X}_2^1$$. At the same time, each discriminator $$D_i$$ also gives class predictions for input samples, regardless of whether they are real or fake, similar to the one used in AC-GAN [(Odena et al., 2017)](#odena2017).
 
 #### <a name="shared"></a> *Shared Latent Space
 
@@ -408,6 +420,8 @@ In this project, we designed the (semi-)supervised image-to-image translator usi
 <a name="prabhu2019"></a>[(Prabhu, 2019) Prabhu, Vinay Uday. "Kannada-mnist: A new handwritten digits dataset for the kannada language." arXiv preprint arXiv:1908.01242 (2019).](https://arxiv.org/abs/1908.01242)
 
 <a name="yan2016"></a>[(Yan et al., 2016) Yan, Xinchen, et al. "Attribute2image: Conditional image generation from visual attributes." European Conference on Computer Vision. Springer, Cham, 2016.](https://link.springer.com/chapter/10.1007/978-3-319-46493-0_47)
+
+<a name="hayes2019"></a>[(Hayes et al., 2019) Hayes, Jamie, et al. "LOGAN: Membership inference attacks against generative models." Proceedings on Privacy Enhancing Technologies 2019.1 (2019): 133-152.](https://content.sciendo.com/view/journals/popets/2019/1/article-p133.xml)
 
 <a name="odena2017"></a>[(Odena et al., 2017) Odena, Augustus, Christopher Olah, and Jonathon Shlens. "Conditional image synthesis with auxiliary classifier gans." Proceedings of the 34th International Conference on Machine Learning-Volume 70. JMLR. org, 2017.](https://dl.acm.org/doi/10.5555/3305890.3305954 "AC-GAN")
 
