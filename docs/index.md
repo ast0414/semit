@@ -357,7 +357,7 @@ Meanwhile, we also compared the accuracy of our translator model to the aforemen
 
 Since the baseline classifiers were trained on each dataset only, they perform very poor on the other domain. On the other hand, our translator model performs well on both domain. Furthermore, our translator performs even better than the baseline classifier for each domain. It can be inferred that the translation task helps on regularization and thus the translator model generalizes well on the classification taks as well.
 
-There is still room for improvements.
+There is still room for improvements as the accuracy of translator is behind the state-of-the-art classification model for each dataset. We expect the performance of both translation and classification can be further improved if we adopt more sophisticated architectures for our backbone modules of the encoder, generator, and discriminator. 
 
 ### Visualization of the Shared Latent Space
 Last but not least, we visualized the shared latent space learned by our translator model. We collected all latent vector $$z$$ from both datasets using the encoders $$E_1$$ and $$E_2$$ and construct 2-dimensional visualization embeddings using t-SNE [(Maaten 2014)](#maaten2014).
