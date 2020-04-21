@@ -3,6 +3,9 @@
 ## Project GitHub Pages
 https://ast0414.github.io/semit/
 
+## Presentation Video
+[![Presentation](https://img.youtube.com/vi/O4ehdC4vjMU/0.jpg)](https://www.youtube.com/watch?v=O4ehdC4vjMU "Click to play on YouTube")
+
 ## Abstract (of abstract)
 In this project, we propose a (semi-)supervised image-to-image translation framework as a domain adaptation method based on a combination of variational autoencoders and generative adversarial networks upon a shared latent space assumption.
 
